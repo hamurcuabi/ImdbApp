@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ImdbApp</string>
+    <string name="unexpected_error">Unexpected error</string>
+    <string name="socket_exception">Socket exception</string>
+    <string name="io_exception">IO exception</string>
+    <string name="no_internet_connection">No internet</string>
+    <string name="auth_error">Auth failed</string>
 </resources>

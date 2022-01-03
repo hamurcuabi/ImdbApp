@@ -45,7 +45,7 @@ android {
             dimension "ProductType"
             versionCode version_code
             versionName "$version_name"
-            buildConfigField "String", 'BASE_URL', '"https://api.themoviedb.org/3/"'
+            buildConfigField "String", 'BASE_URL', '"https://api.themoviedb.org/3/movie/"'
             buildConfigField "String", 'API_KEY', '"340aadccb47519c9d2f79049b271db78"'
             buildConfigField "boolean", 'IS_PROD', "true"
         }
@@ -54,7 +54,7 @@ android {
             dimension "ProductType"
             versionCode version_code
             versionName "$version_name"
-            buildConfigField "String", 'BASE_URL', '"https://api.themoviedb.org/3/"'
+            buildConfigField "String", 'BASE_URL', '"https://api.themoviedb.org/3/movie/"'
             buildConfigField "String", 'API_KEY', '"340aadccb47519c9d2f79049b271db78"'
             buildConfigField "boolean", 'IS_PROD', "false"
 
