@@ -2,6 +2,8 @@ package com.hamurcuabi.imdbapp.core
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 
 
 typealias InflateActivityView<T> = (LayoutInflater) -> T
@@ -36,3 +38,19 @@ internal interface ViewModelContract<EVENT> {
  * This is thrown, if you have not attached any observer to the LiveData.
  */
 class NoObserverAttachedException(message: String) : Exception(message)
+
+/**
+ * Basic ext func to load image with glide
+ */
+fun ImageView.loadWithGlide(url: String?) {
+    Glide.with(this.context)
+        .load(url)
+        .fitCenter()
+        .into(this)
+}
+
+/**
+ * use it with when, to add all remaining branches
+ */
+val <T> T.exhaustive: T
+    get() = this

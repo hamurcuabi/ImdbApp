@@ -11,14 +11,11 @@ class DetailFragment :
     override val viewModel: DetailViewModel by viewModels()
 
     override fun init() {
-        TODO("Not yet implemented")
     }
 
     override fun renderViewState(viewState: DetailViewModel.DetailViewState) {
-        TODO("Not yet implemented")
     }
 
     override fun renderViewEffect(viewEffect: DetailViewModel.DetailViewEffect) {
-        TODO("Not yet implemented")
     }
 }

@@ -111,4 +111,10 @@ dependencies {
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
+    //Viewpager2
+    implementation "androidx.viewpager2:viewpager2:$viewPagerVersion"
+
+    //Swipe to refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshVersion"
 }
