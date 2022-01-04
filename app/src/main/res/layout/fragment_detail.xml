@@ -75,11 +75,11 @@
                     android:background="@drawable/separator_dot" />
 
                 <TextView
+                    style="@style/TextColorStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/robot_medium"
                     android:text="@{viewState.movieDetail.releaseDate}"
-                    android:textColor="@color/blackTitle"
                     android:textSize="13sp"
                     tools:text="15.02.2021" />
 
@@ -88,12 +88,12 @@
 
             <TextView
                 android:id="@+id/textView"
+                style="@style/TextColorStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/m16"
                 android:fontFamily="@font/roboto_bold"
                 android:text="@{viewState.movieDetail.originalTitle}"
-                android:textColor="@color/blackTitle"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/linearLayout"
                 app:layout_constraintStart_toStartOf="@+id/linearLayout"
@@ -101,12 +101,12 @@
                 tools:text="KING DOMKIN GDOMKINGDOM" />
 
             <TextView
+                style="@style/TextColorStyle"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/m8"
                 android:fontFamily="@font/robot_medium"
                 android:text="@{viewState.movieDetail.overview}"
-                android:textColor="@color/blackTitle"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/textView"

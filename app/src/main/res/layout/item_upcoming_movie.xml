@@ -35,6 +35,7 @@
 
         <TextView
             android:id="@+id/txtTitle"
+            style="@style/TextColorStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/m8"
@@ -43,7 +44,6 @@
             android:fontFamily="@font/roboto_bold"
             android:maxLines="2"
             android:text="@{item.originalTitle}"
-            android:textColor="@color/blackTitle"
             android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/appCompatImageView"
             app:layout_constraintStart_toEndOf="@+id/imgCover"
