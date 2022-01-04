@@ -29,10 +29,10 @@ class MainRepository @Inject constructor(
         emit(response)
     }
 
-    suspend fun getUpcomingMovieList() = flow {
+    suspend fun getUpcomingMovieList(page:Int) = flow {
         emit(Resource.Loading)
         val networkResponse = safeApiCall {
-            apiHelper.getUpcomingMovieList()
+            apiHelper.getUpcomingMovieList(page)
         }
         val response = when (networkResponse) {
             is NetworkResource.Success -> Resource.Success(networkResponse.data?.body())

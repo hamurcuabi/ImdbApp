@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewState"
+            type="com.hamurcuabi.imdbapp.presentation.home.HomeViewModel.HomeViewState" />
+    </data>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        customVisibility="@{viewState.loading}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:shimmer_auto_start="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:background="@color/gray">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white30" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                android:orientation="vertical">
+
+                <include layout="@layout/item_upcoming_movie_shimmer" />
+
+                <include layout="@layout/item_upcoming_movie_shimmer" />
+
+                <include layout="@layout/item_upcoming_movie_shimmer" />
+
+                <include layout="@layout/item_upcoming_movie_shimmer" />
+
+                <include layout="@layout/item_upcoming_movie_shimmer" />
+
+                <include layout="@layout/item_upcoming_movie_shimmer" />
+
+                <include layout="@layout/item_upcoming_movie_shimmer" />
+
+                <include layout="@layout/item_upcoming_movie_shimmer" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+</layout>

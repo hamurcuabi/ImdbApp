@@ -3,7 +3,9 @@ package com.hamurcuabi.imdbapp.core
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import com.bumptech.glide.Glide
+import com.hamurcuabi.imdbapp.R
 
 
 typealias InflateActivityView<T> = (LayoutInflater) -> T
@@ -45,6 +47,14 @@ class NoObserverAttachedException(message: String) : Exception(message)
 fun ImageView.loadWithGlide(url: String?) {
     Glide.with(this.context)
         .load(url)
+        .fitCenter()
+        .error(R.drawable.ic_no_image)
+        .into(this)
+}
+
+fun ImageView.loadWithGlide(@DrawableRes drawable: Int) {
+    Glide.with(this.context)
+        .load(drawable)
         .fitCenter()
         .into(this)
 }

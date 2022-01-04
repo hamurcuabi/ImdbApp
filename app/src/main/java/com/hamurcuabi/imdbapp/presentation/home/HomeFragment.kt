@@ -1,11 +1,15 @@
 package com.hamurcuabi.imdbapp.presentation.home
 
+import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hamurcuabi.imdbapp.core.base.BaseFragment
+import com.hamurcuabi.imdbapp.core.exhaustive
 import com.hamurcuabi.imdbapp.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.abs
@@ -23,10 +27,16 @@ class HomeFragment :
     override val viewModel: HomeViewModel by viewModels()
 
     override fun init() {
+        setupShimmer()
         refreshData()
         setupSwipeRefresh()
         setupAdapters()
+        initScrollListener()
         setupIndicator()
+    }
+
+    private fun setupShimmer() {
+        (binding.shimmer.root as ShimmerFrameLayout).startShimmer()
     }
 
     private fun refreshData() {
@@ -56,6 +66,19 @@ class HomeFragment :
             vp2MovieOverview.adapter = movieOverviewSliderAdapter
             rcvUpcoming.adapter = upcomingMovieRecyclerViewAdapter
         }
+    }
+
+    private fun initScrollListener() {
+        binding.rcvUpcoming.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
+                val lastPosition = linearLayoutManager!!.findLastCompletelyVisibleItemPosition()
+                if (lastPosition == upcomingMovieRecyclerViewAdapter.itemCount - 1) {
+                    viewModel.process(HomeViewModel.HomeViewEvent.LoadMore)
+                }
+            }
+        })
     }
 
     override fun renderViewState(viewState: HomeViewModel.HomeViewState) {

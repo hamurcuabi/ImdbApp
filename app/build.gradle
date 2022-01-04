@@ -117,4 +117,7 @@ dependencies {
 
     //Swipe to refresh
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshVersion"
+
+    //shimmer effect
+    implementation "com.facebook.shimmer:shimmer:$shimmerVersion"
 }

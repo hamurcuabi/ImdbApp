@@ -29,7 +29,8 @@ buildscript {
         testCoroutineVersion = "1.5.0"
         testCoreVersion = "2.1.0"
         viewPagerVersion = "1.0.0"
-        swipeRefreshVersion = "1.0.0"
+        swipeRefreshVersion = "1.1.0"
+        shimmerVersion = "0.5.0"
     }
     repositories {
         google()

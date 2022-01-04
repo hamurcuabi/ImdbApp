@@ -10,8 +10,8 @@ class ApiHelperImpl @Inject constructor(private val apiService: ApiService) : Ap
     override suspend fun getNowPlayingMovieList(): Response<MovieListResponse> =
         apiService.getNowPlayingMovieList()
 
-    override suspend fun getUpcomingMovieList(): Response<MovieListResponse> =
-        apiService.getUpcomingMovieList()
+    override suspend fun getUpcomingMovieList(page:Int): Response<MovieListResponse> =
+        apiService.getUpcomingMovieList(page)
 
     override suspend fun getMovieDetail(id: Int): Response<MovieDetailResponse> =
         apiService.getMovieDetail(id)

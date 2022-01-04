@@ -13,6 +13,7 @@ import com.hamurcuabi.imdbapp.presentation.MainRepository
 import com.hamurcuabi.imdbapp.presentation.home.HomeViewModel.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -53,7 +54,16 @@ class HomeViewModel @Inject constructor(
             is HomeViewEvent.GetNowPlayingMovieList -> fetchNowPlayingMovieList()
             is HomeViewEvent.ClickToItem -> itemClicked(viewEvent.item)
             is HomeViewEvent.GetUpcomingMovieList -> fetchUpcomingMovieList()
+            HomeViewEvent.LoadMore -> loadMore()
         }.exhaustive
+    }
+
+    private fun loadMore() {
+        if (viewState.maxApiPage >= viewState.currentApiPage) {
+            val nextPage = viewState.currentApiPage + 1
+            viewState = viewState.copy(currentApiPage = nextPage)
+            fetchUpcomingMovieList(nextPage)
+        }
     }
 
 
@@ -87,23 +97,35 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchUpcomingMovieList() {
+    private fun fetchUpcomingMovieList(page: Int = 1) {
         viewModelScope.launch {
-            val responseFlow = mainRepository.getUpcomingMovieList().flowOn(Dispatchers.IO)
+            val responseFlow = mainRepository.getUpcomingMovieList(page).flowOn(Dispatchers.IO)
+            val isPaging = page > 1
             responseFlow.collect {
                 when (val response = it) {
                     is Resource.Failure -> {
-                        viewState = viewState.copy(isLoading = false)
+                        viewState = viewState.copy(isLoading = false, isPagingLoading = false)
                         viewEffect = HomeViewEffect.ShowToast(message = response.errorMessage)
                     }
                     is Resource.Loading -> {
-                        viewState = viewState.copy(isLoading = true)
+                        viewState =
+                            viewState.copy(isLoading = isPaging.not(), isPagingLoading = isPaging)
                         viewEffect = HomeViewEffect.ShowToast(message = "Loading")
                     }
                     is Resource.Success -> {
+                        // It means paging
+                        var upcomingList = response.value?.movieOverviews
+                        upcomingList?.let { list ->
+                            if (page > 1) {
+                                upcomingList = viewState.upcomingList?.plus(list)
+                            }
+                        }
                         viewState = viewState.copy(
-                            upcomingList = response.value?.movieOverviews,
-                            isLoading = false
+                            upcomingList = upcomingList,
+                            isLoading = false,
+                            isPagingLoading = false,
+                            currentApiPage = response.value?.page ?: 0,
+                            maxApiPage = response.value?.totalPages ?: 100
                         )
                         resetTimer()
                         viewEffect = HomeViewEffect.ShowToast(message = "Success")
@@ -122,6 +144,7 @@ class HomeViewModel @Inject constructor(
     sealed class HomeViewEvent {
         object GetNowPlayingMovieList : HomeViewEvent()
         object GetUpcomingMovieList : HomeViewEvent()
+        object LoadMore : HomeViewEvent()
         data class ClickToItem(val item: MovieOverview) : HomeViewEvent()
     }
 
@@ -129,7 +152,10 @@ class HomeViewModel @Inject constructor(
         val upcomingList: List<MovieOverview>? = emptyList(),
         val nowPlayingList: List<MovieOverview>? = emptyList(),
         val isLoading: Boolean = false,
-        val currentSliderPage: Int = 0
+        val isPagingLoading: Boolean = false,
+        val currentSliderPage: Int = 0,
+        val currentApiPage: Int = 1,
+        val maxApiPage: Int = 100,
     )
 
     sealed class HomeViewEffect {

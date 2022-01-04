@@ -7,6 +7,6 @@ import retrofit2.Response
 interface ApiHelper {
 
     suspend fun getNowPlayingMovieList(): Response<MovieListResponse>
-    suspend fun getUpcomingMovieList(): Response<MovieListResponse>
+    suspend fun getUpcomingMovieList(page:Int): Response<MovieListResponse>
     suspend fun getMovieDetail(id: Int): Response<MovieDetailResponse>
 }
