@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hamurcuabi.imdbapp.core.base.BaseFragment
-import com.hamurcuabi.imdbapp.core.exhaustive
+import com.hamurcuabi.imdbapp.core.utils.exhaustive
 import com.hamurcuabi.imdbapp.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -88,7 +88,7 @@ class HomeFragment :
     override fun renderViewEffect(viewEffect: HomeViewModel.HomeViewEffect) {
         when (viewEffect) {
             is HomeViewModel.HomeViewEffect.GoToDetailPage -> navigateToDetail(viewEffect.movieId)
-            is HomeViewModel.HomeViewEffect.ShowToast -> Unit
+            is HomeViewModel.HomeViewEffect.ShowToast -> showToast(viewEffect.message)
         }.exhaustive
     }
 }

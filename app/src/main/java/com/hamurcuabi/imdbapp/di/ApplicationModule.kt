@@ -1,12 +1,11 @@
-package com.hamurcuabi.imdbapp.di.module
+package com.hamurcuabi.imdbapp.di
 
 import com.hamurcuabi.imdbapp.BuildConfig
 import com.hamurcuabi.imdbapp.data.network.api.ApiHelper
 import com.hamurcuabi.imdbapp.data.network.api.ApiHelperImpl
 import com.hamurcuabi.imdbapp.data.network.ApiKeyAndLanguageInterceptor
 import com.hamurcuabi.imdbapp.data.network.api.ApiService
-import com.hamurcuabi.imdbapp.di.DispatcherImpl
-import com.hamurcuabi.imdbapp.di.DispatcherProvider
+import com.hamurcuabi.imdbapp.di.module.DispatcherImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

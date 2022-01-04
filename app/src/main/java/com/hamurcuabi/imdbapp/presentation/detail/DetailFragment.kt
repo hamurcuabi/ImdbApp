@@ -1,10 +1,9 @@
 package com.hamurcuabi.imdbapp.presentation.detail
 
 import androidx.fragment.app.viewModels
-import com.facebook.shimmer.ShimmerFrameLayout
 import com.hamurcuabi.imdbapp.R
 import com.hamurcuabi.imdbapp.core.base.BaseFragment
-import com.hamurcuabi.imdbapp.core.exhaustive
+import com.hamurcuabi.imdbapp.core.utils.exhaustive
 import com.hamurcuabi.imdbapp.databinding.FragmentDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,7 +33,7 @@ class DetailFragment :
     override fun renderViewEffect(viewEffect: DetailViewModel.DetailViewEffect) {
         when (viewEffect) {
             is DetailViewModel.DetailViewEffect.NavigateBack -> navigateBack()
-            is DetailViewModel.DetailViewEffect.ShowToast -> Unit
+            is DetailViewModel.DetailViewEffect.ShowToast -> showToast(viewEffect.message)
         }.exhaustive
     }
 }

@@ -22,10 +22,9 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.hamurcuabi.imdbapp.core.NoObserverAttachedException
+import com.hamurcuabi.imdbapp.core.utils.NoObserverAttachedException
 import com.hamurcuabi.imdbapp.core.utils.SingleLiveEvent
-import com.hamurcuabi.imdbapp.core.TAG
-import com.hamurcuabi.imdbapp.core.ViewModelContract
+import com.hamurcuabi.imdbapp.core.utils.ViewModelContract
 
 /**
  * Create ViewModels by Extending this class.
@@ -59,7 +58,6 @@ open class BaseMVIViewModel<STATE, EFFECT, EVENT>(application: Application) :
         get() = _viewState
             ?: throw UninitializedPropertyAccessException("\"viewState\" was queried before being initialized")
         set(value) {
-            Log.d(TAG, "setting viewState : $value")
             _viewState = value
             _viewStates.value = value!!
         }
@@ -73,7 +71,6 @@ open class BaseMVIViewModel<STATE, EFFECT, EVENT>(application: Application) :
         get() = _viewEffect
             ?: throw UninitializedPropertyAccessException("\"viewEffect\" was queried before being initialized")
         set(value) {
-            Log.d(TAG, "setting viewEffect : $value")
             _viewEffect = value
             _viewEffects.value = value!!
         }
@@ -83,12 +80,6 @@ open class BaseMVIViewModel<STATE, EFFECT, EVENT>(application: Application) :
         if (!viewStates().hasObservers()) {
             throw NoObserverAttachedException("No observer attached. In case of custom View \"startObserving()\" function needs to be called manually.")
         }
-        Log.d(TAG, "processing viewEvent: $viewEvent")
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.d(TAG, "onCleared")
     }
 
 }

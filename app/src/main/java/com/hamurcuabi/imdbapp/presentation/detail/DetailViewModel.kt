@@ -50,14 +50,12 @@ class DetailViewModel @Inject constructor(
                     }
                     is Resource.Loading -> {
                         viewState = viewState.copy(isLoading = true)
-                        viewEffect = DetailViewEffect.ShowToast(message = "Loading")
                     }
                     is Resource.Success -> {
                         viewState = viewState.copy(
                             movieDetail = response.value,
                             isLoading = false
                         )
-                        viewEffect = DetailViewEffect.ShowToast(message = "Success")
                     }
                 }
             }

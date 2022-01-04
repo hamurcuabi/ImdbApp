@@ -2,18 +2,15 @@ package com.hamurcuabi.imdbapp.presentation.home
 
 import android.app.Application
 import android.os.CountDownTimer
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.hamurcuabi.imdbapp.core.base.BaseMVIViewModel
-import com.hamurcuabi.imdbapp.core.exhaustive
+import com.hamurcuabi.imdbapp.core.utils.exhaustive
 import com.hamurcuabi.imdbapp.core.utils.Resource
 import com.hamurcuabi.imdbapp.data.network.model.common.MovieOverview
 import com.hamurcuabi.imdbapp.presentation.MainRepository
 import com.hamurcuabi.imdbapp.presentation.home.HomeViewModel.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -24,6 +21,7 @@ class HomeViewModel @Inject constructor(
     application: Application,
     private val mainRepository: MainRepository,
 ) : BaseMVIViewModel<HomeViewState, HomeViewEffect, HomeViewEvent>(application) {
+
     companion object {
         const val SLIDER_COUNT = 6
         const val INTERVAL = 3000L
@@ -88,7 +86,6 @@ class HomeViewModel @Inject constructor(
                     }
                     is Resource.Loading -> {
                         viewState = viewState.copy(isLoading = true)
-                        viewEffect = HomeViewEffect.ShowToast(message = "Loading")
                     }
                     is Resource.Success -> {
                         viewState = viewState.copy(
@@ -96,7 +93,6 @@ class HomeViewModel @Inject constructor(
                             isLoading = false
                         )
                         startToSlide()
-                        viewEffect = HomeViewEffect.ShowToast(message = "Success")
                     }
                 }
             }
@@ -116,7 +112,6 @@ class HomeViewModel @Inject constructor(
                     is Resource.Loading -> {
                         viewState =
                             viewState.copy(isLoading = isPaging.not(), isPagingLoading = isPaging)
-                        viewEffect = HomeViewEffect.ShowToast(message = "Loading")
                     }
                     is Resource.Success -> {
                         // It means paging
@@ -134,7 +129,6 @@ class HomeViewModel @Inject constructor(
                             maxApiPage = response.value?.totalPages ?: 100
                         )
                         resetTimer()
-                        viewEffect = HomeViewEffect.ShowToast(message = "Success")
                     }
                 }
             }

@@ -1,32 +1,13 @@
-package com.hamurcuabi.imdbapp.core
+package com.hamurcuabi.imdbapp.core.utils
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hamurcuabi.imdbapp.R
 
-
-typealias InflateActivityView<T> = (LayoutInflater) -> T
-
 typealias InflateFragmentView<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
-
-
-internal val Any.TAG: String
-    get() {
-        return if (!javaClass.isAnonymousClass) {
-            val name = javaClass.simpleName
-            // first 23 chars
-            if (name.length <= 23) name else name.substring(0, 23)
-        } else {
-            val name = javaClass.name
-            // last 23 chars
-            if (name.length <= 23) name else name.substring(name.length - 23, name.length)
-        }
-    }
 
 /**
  * Internal Contract to be implemented by ViewModel

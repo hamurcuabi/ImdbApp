@@ -29,7 +29,7 @@ class MainRepository @Inject constructor(
         emit(response)
     }
 
-    suspend fun getUpcomingMovieList(page:Int) = flow {
+    suspend fun getUpcomingMovieList(page: Int) = flow {
         emit(Resource.Loading)
         val networkResponse = safeApiCall {
             apiHelper.getUpcomingMovieList(page)

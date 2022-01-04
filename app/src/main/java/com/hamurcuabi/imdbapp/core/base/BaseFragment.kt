@@ -1,21 +1,21 @@
 package com.hamurcuabi.imdbapp.core.base
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
 import androidx.viewbinding.ViewBinding
-import com.hamurcuabi.imdbapp.core.InflateFragmentView
+import com.hamurcuabi.imdbapp.core.utils.InflateFragmentView
 
 abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : BaseMVIViewModel<STATE, EFFECT, EVENT>>(
     private val inflateFragmentView: InflateFragmentView<VB>
 ) : Fragment() {
-    private val TAG = "BaseFragment"
+
     abstract val viewModel: ViewModel
     private var _binding: VB? = null
     protected val binding get() = _binding!!
@@ -27,18 +27,13 @@ abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : 
     abstract fun renderViewEffect(viewEffect: EFFECT)
 
     private val viewStateObserver = Observer<STATE> {
-        Log.d(TAG, "observed viewState : $it")
         renderViewState(it)
     }
 
     private val viewEffectObserver = Observer<EFFECT> {
-        Log.d(TAG, "observed viewEffect : $it")
         renderViewEffect(it)
     }
 
-    /**
-     * Navigate to an action
-     */
     protected fun navigateTo(actionId: Int) {
         Navigation.findNavController(binding.root).navigate(actionId)
     }
@@ -49,6 +44,10 @@ abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : 
 
     protected fun navigateBack() {
         Navigation.findNavController(binding.root).popBackStack()
+    }
+
+    protected fun showToast(toString: String) {
+        Toast.makeText(requireContext(), toString, Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateView(

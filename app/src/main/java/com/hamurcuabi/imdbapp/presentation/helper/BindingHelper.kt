@@ -6,12 +6,10 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.facebook.shimmer.ShimmerFrameLayout
 import com.hamurcuabi.imdbapp.R
-import com.hamurcuabi.imdbapp.core.exhaustive
-import com.hamurcuabi.imdbapp.core.loadWithGlide
+import com.hamurcuabi.imdbapp.core.utils.exhaustive
+import com.hamurcuabi.imdbapp.core.utils.loadWithGlide
 import com.hamurcuabi.imdbapp.data.network.model.common.MovieOverview
-import com.hamurcuabi.imdbapp.presentation.home.HomeViewModel
 import com.hamurcuabi.imdbapp.presentation.home.MovieOverviewSliderAdapter
 import com.hamurcuabi.imdbapp.presentation.home.UpcomingMovieRecyclerViewAdapter
 

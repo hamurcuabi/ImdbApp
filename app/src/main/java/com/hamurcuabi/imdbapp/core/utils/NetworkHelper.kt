@@ -53,12 +53,10 @@ class NetworkHelper @Inject constructor(@ApplicationContext private val context:
                             ConnectivityManager.TYPE_ETHERNET -> true
                             else -> false
                         }
-
                     }
                 }
             }
         }
-
         return result
     }
 }
