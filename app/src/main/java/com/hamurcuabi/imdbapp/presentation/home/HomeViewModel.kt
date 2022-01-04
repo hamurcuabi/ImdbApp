@@ -11,6 +11,7 @@ import com.hamurcuabi.imdbapp.presentation.MainRepository
 import com.hamurcuabi.imdbapp.presentation.home.HomeViewModel.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ class HomeViewModel @Inject constructor(
 
     companion object {
         const val SLIDER_COUNT = 6
-        const val INTERVAL = 3000L
+        const val INTERVAL = 5000L
         const val MILLIS_IN_FUTURE = INTERVAL * SLIDER_COUNT
     }
 
@@ -111,7 +112,10 @@ class HomeViewModel @Inject constructor(
                 when (val response = it) {
                     is Resource.Failure -> {
                         viewState =
-                            viewState.copy(isLoadingUpcomingList = false, isPagingLoading = false)
+                            viewState.copy(
+                                isLoadingUpcomingList = false,
+                                isPagingLoading = false
+                            )
                         viewEffect = HomeViewEffect.ShowToast(message = response.errorMessage)
                     }
                     is Resource.Loading -> {
