@@ -6,12 +6,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
-        <variable
-            name="viewModel"
-            type="com.hamurcuabi.imdbapp.presentation.home.HomeViewModel" />
-
         <variable
             name="viewState"
             type="com.hamurcuabi.imdbapp.presentation.home.HomeViewModel.HomeViewState" />

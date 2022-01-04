@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
 import androidx.viewbinding.ViewBinding
 import com.hamurcuabi.imdbapp.core.InflateFragmentView
@@ -42,6 +43,14 @@ abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : 
         Navigation.findNavController(binding.root).navigate(actionId)
     }
 
+    protected fun navigateTo(directions: NavDirections) {
+        Navigation.findNavController(binding.root).navigate(directions)
+    }
+
+    protected fun navigateBack() {
+        Navigation.findNavController(binding.root).popBackStack()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,6 +65,5 @@ abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : 
         viewModel.viewStates().observe(this, viewStateObserver)
         viewModel.viewEffects().observe(this, viewEffectObserver)
         init()
-
     }
 }

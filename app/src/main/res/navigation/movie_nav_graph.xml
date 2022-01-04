@@ -15,5 +15,10 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.hamurcuabi.imdbapp.presentation.detail.DetailFragment"
-        android:label="DetailFragment" />
+        android:label="DetailFragment" >
+        <argument
+            android:name="movieId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
 </navigation>

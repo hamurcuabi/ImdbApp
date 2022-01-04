@@ -2,6 +2,7 @@ package com.hamurcuabi.imdbapp.presentation.helper
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -10,6 +11,7 @@ import com.hamurcuabi.imdbapp.R
 import com.hamurcuabi.imdbapp.core.exhaustive
 import com.hamurcuabi.imdbapp.core.loadWithGlide
 import com.hamurcuabi.imdbapp.data.network.model.common.MovieOverview
+import com.hamurcuabi.imdbapp.presentation.home.HomeViewModel
 import com.hamurcuabi.imdbapp.presentation.home.MovieOverviewSliderAdapter
 import com.hamurcuabi.imdbapp.presentation.home.UpcomingMovieRecyclerViewAdapter
 
@@ -52,11 +54,8 @@ fun setVisibility(view: View, exp: Boolean?) {
     view.visibility = visibility
 }
 
-@BindingAdapter("shimmerStartStop")
-fun setShimmerView(view: ShimmerFrameLayout, exp: Boolean?) {
-    when (exp) {
-        true -> view.startShimmer()
-        false -> view.stopShimmer()
-        null -> view.startShimmer()
-    }.exhaustive
+@BindingAdapter("textAverage")
+fun setAverageText(view: TextView, average: Double) {
+    val text = "$average/10"
+    view.text = text
 }

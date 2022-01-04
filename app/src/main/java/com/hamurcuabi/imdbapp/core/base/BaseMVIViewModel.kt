@@ -61,7 +61,7 @@ open class BaseMVIViewModel<STATE, EFFECT, EVENT>(application: Application) :
         set(value) {
             Log.d(TAG, "setting viewState : $value")
             _viewState = value
-            _viewStates.value = value
+            _viewStates.value = value!!
         }
 
 
@@ -75,7 +75,7 @@ open class BaseMVIViewModel<STATE, EFFECT, EVENT>(application: Application) :
         set(value) {
             Log.d(TAG, "setting viewEffect : $value")
             _viewEffect = value
-            _viewEffects.value = value
+            _viewEffects.value = value!!
         }
 
     @CallSuper
@@ -90,4 +90,5 @@ open class BaseMVIViewModel<STATE, EFFECT, EVENT>(application: Application) :
         super.onCleared()
         Log.d(TAG, "onCleared")
     }
+
 }

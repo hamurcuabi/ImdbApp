@@ -30,12 +30,13 @@ class DetailViewModel @Inject constructor(
         super.process(viewEvent)
         when (viewEvent) {
             is DetailViewEvent.GetMovieDetail -> fetchMovieDetail(viewEvent.id)
-            is DetailViewEvent.ClickToItem -> itemClicked(viewEvent.item)
+            is DetailViewEvent.ShowError -> navigateBackWithErrorMessage(viewEvent.message)
         }
     }
 
-    private fun itemClicked(movieOverViewItem: MovieOverview) {
-        viewEffect = DetailViewEffect.ShowToast(movieOverViewItem.toString())
+    private fun navigateBackWithErrorMessage(message: String) {
+        viewEffect = DetailViewEffect.ShowToast(message)
+        viewEffect = DetailViewEffect.NavigateBack
     }
 
     private fun fetchMovieDetail(id: Int) {
@@ -65,7 +66,7 @@ class DetailViewModel @Inject constructor(
 
     sealed class DetailViewEvent {
         data class GetMovieDetail(val id: Int) : DetailViewEvent()
-        data class ClickToItem(val item: MovieOverview) : DetailViewEvent()
+        data class ShowError(val message: String) : DetailViewEvent()
     }
 
     data class DetailViewState(
@@ -75,5 +76,6 @@ class DetailViewModel @Inject constructor(
 
     sealed class DetailViewEffect {
         data class ShowToast(val message: String) : DetailViewEffect()
+        object NavigateBack : DetailViewEffect()
     }
 }

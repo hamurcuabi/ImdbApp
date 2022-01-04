@@ -1,18 +1,13 @@
 package com.hamurcuabi.imdbapp.presentation.home
 
-import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
-import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hamurcuabi.imdbapp.core.base.BaseFragment
 import com.hamurcuabi.imdbapp.core.exhaustive
 import com.hamurcuabi.imdbapp.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.abs
 
 
 @AndroidEntryPoint
@@ -27,16 +22,10 @@ class HomeFragment :
     override val viewModel: HomeViewModel by viewModels()
 
     override fun init() {
-        setupShimmer()
-        refreshData()
         setupSwipeRefresh()
         setupAdapters()
         initScrollListener()
         setupIndicator()
-    }
-
-    private fun setupShimmer() {
-        (binding.shimmer.root as ShimmerFrameLayout).startShimmer()
     }
 
     private fun refreshData() {
@@ -59,13 +48,20 @@ class HomeFragment :
 
     private fun setupAdapters() {
         movieOverviewSliderAdapter = MovieOverviewSliderAdapter {
+            viewModel.process(HomeViewModel.HomeViewEvent.ClickToItem(it))
         }
         upcomingMovieRecyclerViewAdapter = UpcomingMovieRecyclerViewAdapter {
+            viewModel.process(HomeViewModel.HomeViewEvent.ClickToItem(it))
         }
         binding.apply {
             vp2MovieOverview.adapter = movieOverviewSliderAdapter
             rcvUpcoming.adapter = upcomingMovieRecyclerViewAdapter
         }
+    }
+
+    private fun navigateToDetail(movieId: Int) {
+        val directions = HomeFragmentDirections.actionHomeFragmentToDetailFragment(movieId)
+        navigateTo(directions)
     }
 
     private fun initScrollListener() {
@@ -90,7 +86,9 @@ class HomeFragment :
     }
 
     override fun renderViewEffect(viewEffect: HomeViewModel.HomeViewEffect) {
-
+        when (viewEffect) {
+            is HomeViewModel.HomeViewEffect.GoToDetailPage -> navigateToDetail(viewEffect.movieId)
+            is HomeViewModel.HomeViewEffect.ShowToast -> Unit
+        }.exhaustive
     }
-
 }

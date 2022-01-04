@@ -3,7 +3,7 @@ package com.hamurcuabi.imdbapp.di.module
 import com.hamurcuabi.imdbapp.BuildConfig
 import com.hamurcuabi.imdbapp.data.network.api.ApiHelper
 import com.hamurcuabi.imdbapp.data.network.api.ApiHelperImpl
-import com.hamurcuabi.imdbapp.data.network.ApiKeyInterceptor
+import com.hamurcuabi.imdbapp.data.network.ApiKeyAndLanguageInterceptor
 import com.hamurcuabi.imdbapp.data.network.api.ApiService
 import com.hamurcuabi.imdbapp.di.DispatcherImpl
 import com.hamurcuabi.imdbapp.di.DispatcherProvider
@@ -35,7 +35,7 @@ object ApplicationModule {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(ApiKeyInterceptor())
+            .addInterceptor(ApiKeyAndLanguageInterceptor())
             .build()
     } else OkHttpClient
         .Builder()

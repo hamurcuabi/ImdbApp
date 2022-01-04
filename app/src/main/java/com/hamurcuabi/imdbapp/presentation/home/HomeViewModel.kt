@@ -31,7 +31,9 @@ class HomeViewModel @Inject constructor(
     }
 
     init {
-        viewState = HomeViewState()
+        viewState = HomeViewState(isLoading = true, isPagingLoading = false)
+        fetchNowPlayingMovieList()
+        fetchUpcomingMovieList()
     }
 
     private val timer = object : CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
@@ -54,8 +56,13 @@ class HomeViewModel @Inject constructor(
             is HomeViewEvent.GetNowPlayingMovieList -> fetchNowPlayingMovieList()
             is HomeViewEvent.ClickToItem -> itemClicked(viewEvent.item)
             is HomeViewEvent.GetUpcomingMovieList -> fetchUpcomingMovieList()
-            HomeViewEvent.LoadMore -> loadMore()
+            is HomeViewEvent.LoadMore -> loadMore()
+            is HomeViewEvent.StartToSlide -> startToSlide()
         }.exhaustive
+    }
+
+    private fun startToSlide() {
+        timer.start()
     }
 
     private fun loadMore() {
@@ -66,9 +73,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
     private fun itemClicked(movieOverViewItem: MovieOverview) {
-        viewEffect = HomeViewEffect.ShowToast(movieOverViewItem.toString())
+        viewEffect = HomeViewEffect.GoToDetailPage(movieOverViewItem.id)
     }
 
     private fun fetchNowPlayingMovieList() {
@@ -89,7 +95,7 @@ class HomeViewModel @Inject constructor(
                             nowPlayingList = response.value?.movieOverviews?.take(SLIDER_COUNT),
                             isLoading = false
                         )
-                        timer.start()
+                        startToSlide()
                         viewEffect = HomeViewEffect.ShowToast(message = "Success")
                     }
                 }
@@ -145,6 +151,7 @@ class HomeViewModel @Inject constructor(
         object GetNowPlayingMovieList : HomeViewEvent()
         object GetUpcomingMovieList : HomeViewEvent()
         object LoadMore : HomeViewEvent()
+        object StartToSlide : HomeViewEvent()
         data class ClickToItem(val item: MovieOverview) : HomeViewEvent()
     }
 
@@ -160,5 +167,6 @@ class HomeViewModel @Inject constructor(
 
     sealed class HomeViewEffect {
         data class ShowToast(val message: String) : HomeViewEffect()
+        data class GoToDetailPage(val movieId: Int) : HomeViewEffect()
     }
 }

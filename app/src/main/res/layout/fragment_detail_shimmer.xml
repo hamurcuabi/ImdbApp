@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -11,15 +10,11 @@
             type="com.hamurcuabi.imdbapp.presentation.detail.DetailViewModel.DetailViewState" />
     </data>
 
-    <FrameLayout
+    <com.facebook.shimmer.ShimmerFrameLayout
+        customVisibility="@{viewState.loading}"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include
-            android:id="@+id/shimmer"
-            layout="@layout/fragment_detail_shimmer"
-            bind:viewState="@{viewState}" />
-
+        android:layout_height="match_parent"
+        app:shimmer_auto_start="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -31,11 +26,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:adjustViewBounds="true"
+                android:background="@color/gray"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@+id/guideViewPager2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:loadImage="@{viewState.movieDetail.backdropPath}" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -52,33 +47,30 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_imdb" />
+                    android:background="@color/gray" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/m8"
-                    android:src="@drawable/ic_rate" />
+                    android:background="@color/gray" />
 
                 <TextView
-                    textAverage="@{viewState.movieDetail.voteAverage}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/robot_medium"
-                    android:textSize="13sp"
-                    tools:text="7.8/10" />
+                    android:textSize="13sp" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/m8"
-                    android:background="@drawable/separator_dot" />
+                    android:background="@color/gray" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/robot_medium"
-                    android:text="@{viewState.movieDetail.releaseDate}"
                     android:textColor="@color/blackTitle"
                     android:textSize="13sp"
                     tools:text="15.02.2021" />
@@ -92,7 +84,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/m16"
                 android:fontFamily="@font/roboto_bold"
-                android:text="@{viewState.movieDetail.originalTitle}"
                 android:textColor="@color/blackTitle"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/linearLayout"
@@ -105,7 +96,6 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/m8"
                 android:fontFamily="@font/robot_medium"
-                android:text="@{viewState.movieDetail.overview}"
                 android:textColor="@color/blackTitle"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -122,8 +112,5 @@
                 app:layout_constraintGuide_percent="0.4" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </FrameLayout>
-
-
+    </com.facebook.shimmer.ShimmerFrameLayout>
 </layout>
