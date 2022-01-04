@@ -13,11 +13,12 @@ import com.hamurcuabi.imdbapp.data.network.model.common.MovieOverview
 import com.hamurcuabi.imdbapp.presentation.home.MovieOverviewSliderAdapter
 import com.hamurcuabi.imdbapp.presentation.home.UpcomingMovieRecyclerViewAdapter
 
+const val PREFIX_IMAGE_URL = "https://www.themoviedb.org/t/p/w1280"
+
 @BindingAdapter("loadImage")
 fun loadImage(view: ImageView, url: String?) {
     url?.let {
-        val prefix = "https://www.themoviedb.org/t/p/w1280"
-        view.loadWithGlide(prefix + it)
+        view.loadWithGlide(PREFIX_IMAGE_URL + it)
     } ?: run {
         view.loadWithGlide(R.drawable.ic_no_image)
     }
