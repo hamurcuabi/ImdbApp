@@ -81,7 +81,7 @@ class HomeFragment :
         binding.apply {
             this.viewState = viewState
             vp2MovieOverview.currentItem = viewState.currentSliderPage
-            swipeRefresh.isRefreshing = viewState.isLoading
+            swipeRefresh.isRefreshing = viewState.isLoadingNowPlayingList
         }
     }
 

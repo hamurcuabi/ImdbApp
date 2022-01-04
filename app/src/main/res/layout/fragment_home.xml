@@ -15,11 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/shimmer"
-            layout="@layout/fragment_home_shimmer"
-            bind:viewState="@{viewState}" />
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
@@ -30,7 +25,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/vp2MovieOverview"
@@ -72,6 +66,24 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintGuide_percent="0.4" />
+
+                <ProgressBar
+                    customVisibility="@{viewState.loadingNowPlayingList}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/into_tab_layout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/vp2MovieOverview"
+                    app:layout_constraintTop_toTopOf="@+id/vp2MovieOverview" />
+
+                <ProgressBar
+                    customVisibility="@{viewState.loadingUpcomingList}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/rcvUpcoming"
+                    app:layout_constraintEnd_toEndOf="@+id/rcvUpcoming"
+                    app:layout_constraintStart_toStartOf="@+id/rcvUpcoming"
+                    app:layout_constraintTop_toTopOf="@+id/rcvUpcoming" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

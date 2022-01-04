@@ -29,7 +29,11 @@ class HomeViewModel @Inject constructor(
     }
 
     init {
-        viewState = HomeViewState(isLoading = true, isPagingLoading = false)
+        viewState = HomeViewState(
+            isLoadingUpcomingList = true,
+            isLoadingNowPlayingList = true,
+            isPagingLoading = false
+        )
         fetchNowPlayingMovieList()
         fetchUpcomingMovieList()
     }
@@ -81,16 +85,16 @@ class HomeViewModel @Inject constructor(
             responseFlow.collect {
                 when (val response = it) {
                     is Resource.Failure -> {
-                        viewState = viewState.copy(isLoading = false)
+                        viewState = viewState.copy(isLoadingNowPlayingList = false)
                         viewEffect = HomeViewEffect.ShowToast(message = response.errorMessage)
                     }
                     is Resource.Loading -> {
-                        viewState = viewState.copy(isLoading = true)
+                        viewState = viewState.copy(isLoadingNowPlayingList = true)
                     }
                     is Resource.Success -> {
                         viewState = viewState.copy(
                             nowPlayingList = response.value?.movieOverviews?.take(SLIDER_COUNT),
-                            isLoading = false
+                            isLoadingNowPlayingList = false
                         )
                         startToSlide()
                     }
@@ -106,12 +110,16 @@ class HomeViewModel @Inject constructor(
             responseFlow.collect {
                 when (val response = it) {
                     is Resource.Failure -> {
-                        viewState = viewState.copy(isLoading = false, isPagingLoading = false)
+                        viewState =
+                            viewState.copy(isLoadingUpcomingList = false, isPagingLoading = false)
                         viewEffect = HomeViewEffect.ShowToast(message = response.errorMessage)
                     }
                     is Resource.Loading -> {
                         viewState =
-                            viewState.copy(isLoading = isPaging.not(), isPagingLoading = isPaging)
+                            viewState.copy(
+                                isLoadingUpcomingList = isPaging.not(),
+                                isPagingLoading = isPaging
+                            )
                     }
                     is Resource.Success -> {
                         // It means paging
@@ -123,7 +131,7 @@ class HomeViewModel @Inject constructor(
                         }
                         viewState = viewState.copy(
                             upcomingList = upcomingList,
-                            isLoading = false,
+                            isLoadingUpcomingList = false,
                             isPagingLoading = false,
                             currentApiPage = response.value?.page ?: 0,
                             maxApiPage = response.value?.totalPages ?: 100
@@ -152,7 +160,8 @@ class HomeViewModel @Inject constructor(
     data class HomeViewState(
         val upcomingList: List<MovieOverview>? = emptyList(),
         val nowPlayingList: List<MovieOverview>? = emptyList(),
-        val isLoading: Boolean = false,
+        val isLoadingUpcomingList: Boolean = false,
+        val isLoadingNowPlayingList: Boolean = false,
         val isPagingLoading: Boolean = false,
         val currentSliderPage: Int = 0,
         val currentApiPage: Int = 1,
