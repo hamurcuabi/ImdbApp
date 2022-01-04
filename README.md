@@ -1,3 +1,24 @@
+## Architecture Components
+
+- Lifecycle-aware components
+- ViewModels
+- LiveData
+- ViewBinding
+- DataBinding
+- Navigation
+
+## Libraries
+
+- DaggerHilt
+- Retrofit
+- Shimmer
+- Material design
+- Viewpager2
+- Leak canary
+- Coroutine
+- Okhttp
+- Glide
+
 
 ## MVI Architecture
 
