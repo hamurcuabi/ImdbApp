@@ -1,6 +1,5 @@
-package com.hamurcuabi.imdbapp.di.module
+package com.hamurcuabi.imdbapp.di
 
-import com.hamurcuabi.imdbapp.di.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject

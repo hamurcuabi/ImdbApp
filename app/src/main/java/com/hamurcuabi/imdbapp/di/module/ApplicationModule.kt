@@ -1,14 +1,19 @@
-package com.hamurcuabi.imdbapp.di
+package com.hamurcuabi.imdbapp.di.module
 
+import android.content.Context
 import com.hamurcuabi.imdbapp.BuildConfig
+import com.hamurcuabi.imdbapp.core.utils.NetworkHelper
+import com.hamurcuabi.imdbapp.core.utils.ResourceProvider
 import com.hamurcuabi.imdbapp.data.network.api.ApiHelper
 import com.hamurcuabi.imdbapp.data.network.api.ApiHelperImpl
 import com.hamurcuabi.imdbapp.data.network.ApiKeyAndLanguageInterceptor
 import com.hamurcuabi.imdbapp.data.network.api.ApiService
-import com.hamurcuabi.imdbapp.di.module.DispatcherImpl
+import com.hamurcuabi.imdbapp.di.DispatcherImpl
+import com.hamurcuabi.imdbapp.di.DispatcherProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -59,7 +64,6 @@ object ApplicationModule {
     @Singleton
     fun provideApiHelper(apiHelper: ApiHelperImpl): ApiHelper = apiHelper
 
-
     @Provides
     @Singleton
     fun provideDispatchers(dispatcherImpl: DispatcherImpl): DispatcherProvider = dispatcherImpl
@@ -67,4 +71,12 @@ object ApplicationModule {
     @Provides
     @Singleton
     fun provideApplicationScope() = CoroutineScope(SupervisorJob())
+
+    @Provides
+    @Singleton
+    fun provideResourceProvider(@ApplicationContext context: Context) = ResourceProvider(context)
+
+    @Provides
+    @Singleton
+    fun provideNetworkHelper(@ApplicationContext context: Context) = NetworkHelper(context)
 }

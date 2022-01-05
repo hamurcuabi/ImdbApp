@@ -11,82 +11,77 @@
             type="com.hamurcuabi.imdbapp.presentation.home.HomeViewModel.HomeViewState" />
     </data>
 
-    <FrameLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".presentation.Home.HomeFragment">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefresh"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".presentation.Home.HomeFragment">
+            android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp2MovieOverview"
+                submitListViewPager2="@{viewState.nowPlayingList}"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/guideViewPager2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/vp2MovieOverview"
-                    submitListViewPager2="@{viewState.nowPlayingList}"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toTopOf="@+id/guideViewPager2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/into_tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/m16"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/vp2MovieOverview"
+                app:layout_constraintStart_toStartOf="parent"
+                app:tabBackground="@drawable/tab_pager_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp" />
 
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/into_tab_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/m16"
-                    android:background="@android:color/transparent"
-                    app:layout_constraintBottom_toBottomOf="@+id/vp2MovieOverview"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:tabBackground="@drawable/tab_pager_selector"
-                    app:tabGravity="center"
-                    app:tabIndicatorHeight="0dp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvUpcoming"
+                submitList="@{viewState.upcomingList}"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginVertical="@dimen/m8"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideViewPager2"
+                tools:listitem="@layout/item_upcoming_movie" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcvUpcoming"
-                    submitList="@{viewState.upcomingList}"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginVertical="@dimen/m8"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/guideViewPager2"
-                    tools:listitem="@layout/item_upcoming_movie" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideViewPager2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.4" />
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideViewPager2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.4" />
+            <ProgressBar
+                customVisibility="@{viewState.loadingNowPlayingList}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/into_tab_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/vp2MovieOverview"
+                app:layout_constraintTop_toTopOf="@+id/vp2MovieOverview" />
 
-                <ProgressBar
-                    customVisibility="@{viewState.loadingNowPlayingList}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toTopOf="@+id/into_tab_layout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/vp2MovieOverview"
-                    app:layout_constraintTop_toTopOf="@+id/vp2MovieOverview" />
+            <ProgressBar
+                customVisibility="@{viewState.loadingUpcomingList}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/rcvUpcoming"
+                app:layout_constraintEnd_toEndOf="@+id/rcvUpcoming"
+                app:layout_constraintStart_toStartOf="@+id/rcvUpcoming"
+                app:layout_constraintTop_toTopOf="@+id/rcvUpcoming" />
 
-                <ProgressBar
-                    customVisibility="@{viewState.loadingUpcomingList}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="@+id/rcvUpcoming"
-                    app:layout_constraintEnd_toEndOf="@+id/rcvUpcoming"
-                    app:layout_constraintStart_toStartOf="@+id/rcvUpcoming"
-                    app:layout_constraintTop_toTopOf="@+id/rcvUpcoming" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>
