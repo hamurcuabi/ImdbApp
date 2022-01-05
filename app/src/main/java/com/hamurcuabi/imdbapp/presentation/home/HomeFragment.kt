@@ -1,6 +1,8 @@
 package com.hamurcuabi.imdbapp.presentation.home
 
+import android.util.Log
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
@@ -8,6 +10,9 @@ import com.hamurcuabi.imdbapp.core.base.BaseFragment
 import com.hamurcuabi.imdbapp.core.utils.exhaustive
 import com.hamurcuabi.imdbapp.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 
 
 @AndroidEntryPoint
@@ -27,18 +32,21 @@ class HomeFragment :
         initScrollListener()
         setupIndicator()
         setObservers()
-        viewModel.process(HomeViewModel.HomeViewEvent.StartToSlide)
+        viewModel.process(HomeViewModel.HomeViewEvent.ObserveState)
     }
 
     private fun setObservers() {
-        viewModel.currentPage.observe(this, {
-            binding.vp2MovieOverview.currentItem = it
-        })
+        lifecycleScope.launchWhenResumed {
+            viewModel.currentPage.collectLatest {
+                // viewpager2 known issue. So added delay to fix it
+                delay(100)
+                binding.vp2MovieOverview.setCurrentItem(it, true)
+            }
+        }
     }
 
     private fun refreshData() {
-        viewModel.process(HomeViewModel.HomeViewEvent.GetNowPlayingMovieList)
-        viewModel.process(HomeViewModel.HomeViewEvent.GetUpcomingMovieList)
+        viewModel.process(HomeViewModel.HomeViewEvent.RefreshAll)
     }
 
     private fun setupSwipeRefresh() {

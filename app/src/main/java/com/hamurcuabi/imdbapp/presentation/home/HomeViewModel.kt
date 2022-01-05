@@ -12,6 +12,8 @@ import com.hamurcuabi.imdbapp.presentation.MainRepository
 import com.hamurcuabi.imdbapp.presentation.home.HomeViewModel.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -34,12 +36,11 @@ class HomeViewModel @Inject constructor(
             isLoadingNowPlayingList = true,
             isPagingLoading = false
         )
-        fetchNowPlayingMovieList()
-        fetchUpcomingMovieList()
+        refreshAll()
     }
 
-    private var _currentPage = MutableLiveData(0)
-    val currentPage: LiveData<Int> = _currentPage
+    private var _currentPage = MutableStateFlow(0)
+    val currentPage: StateFlow<Int> = _currentPage
 
     private val timer = object : CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
         override fun onTick(millisUntilFinished: Long) {
@@ -51,7 +52,7 @@ class HomeViewModel @Inject constructor(
         }
 
         override fun onFinish() {
-            start()
+            resetTimer()
         }
     }
 
@@ -62,12 +63,18 @@ class HomeViewModel @Inject constructor(
             is HomeViewEvent.ClickToItem -> itemClicked(viewEvent.item)
             is HomeViewEvent.GetUpcomingMovieList -> fetchUpcomingMovieList()
             is HomeViewEvent.LoadMore -> loadMore()
-            is HomeViewEvent.StartToSlide -> startToSlide()
+            is HomeViewEvent.StartToSlide -> resetTimer()
+            HomeViewEvent.ObserveState -> observeState()
+            HomeViewEvent.RefreshAll -> refreshAll()
         }.exhaustive
     }
 
-    private fun startToSlide() {
-        resetTimer()
+    private fun refreshAll() {
+        fetchUpcomingMovieList()
+        fetchNowPlayingMovieList()
+    }
+
+    private fun observeState() {
         viewState = viewState.copy()
     }
 
@@ -100,7 +107,7 @@ class HomeViewModel @Inject constructor(
                             nowPlayingList = response.value?.movieOverviews?.take(SLIDER_COUNT),
                             isLoadingNowPlayingList = false
                         )
-                        startToSlide()
+                        resetTimer()
                     }
                 }
             }
@@ -143,7 +150,6 @@ class HomeViewModel @Inject constructor(
                             currentApiPage = response.value?.page ?: 0,
                             maxApiPage = response.value?.totalPages ?: 100
                         )
-                        resetTimer()
                     }
                 }
             }
@@ -151,12 +157,13 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun resetTimer() {
-        _currentPage.value = 0
         timer.cancel()
         timer.start()
     }
 
     sealed class HomeViewEvent {
+        object ObserveState : HomeViewEvent()
+        object RefreshAll : HomeViewEvent()
         object GetNowPlayingMovieList : HomeViewEvent()
         object GetUpcomingMovieList : HomeViewEvent()
         object LoadMore : HomeViewEvent()
