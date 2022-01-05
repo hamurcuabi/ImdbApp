@@ -1,6 +1,5 @@
 package com.hamurcuabi.imdbapp.presentation.home
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,7 +10,6 @@ import com.hamurcuabi.imdbapp.core.utils.exhaustive
 import com.hamurcuabi.imdbapp.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -21,8 +19,8 @@ class HomeFragment :
         FragmentHomeBinding::inflate
     ) {
 
-    private lateinit var movieOverviewSliderAdapter: MovieOverviewSliderAdapter
-    private lateinit var upcomingMovieRecyclerViewAdapter: UpcomingMovieRecyclerViewAdapter
+    private lateinit var nowPlayingMovieAdapter: NowPlayingMovieAdapter
+    private lateinit var upcomingMovieAdapter: UpcomingMovieAdapter
 
     override val viewModel: HomeViewModel by viewModels()
 
@@ -38,7 +36,7 @@ class HomeFragment :
     private fun setObservers() {
         lifecycleScope.launchWhenResumed {
             viewModel.currentPage.collectLatest {
-                // viewpager2 known issue. So added delay to fix it
+                // TODO Viewpager2 known issue. So added delay to fix it.
                 delay(100)
                 binding.vp2MovieOverview.setCurrentItem(it, true)
             }
@@ -63,15 +61,15 @@ class HomeFragment :
     }
 
     private fun setupAdapters() {
-        movieOverviewSliderAdapter = MovieOverviewSliderAdapter {
+        nowPlayingMovieAdapter = NowPlayingMovieAdapter {
             viewModel.process(HomeViewModel.HomeViewEvent.ClickToItem(it))
         }
-        upcomingMovieRecyclerViewAdapter = UpcomingMovieRecyclerViewAdapter {
+        upcomingMovieAdapter = UpcomingMovieAdapter {
             viewModel.process(HomeViewModel.HomeViewEvent.ClickToItem(it))
         }
         binding.apply {
-            vp2MovieOverview.adapter = movieOverviewSliderAdapter
-            rcvUpcoming.adapter = upcomingMovieRecyclerViewAdapter
+            vp2MovieOverview.adapter = nowPlayingMovieAdapter
+            rcvUpcoming.adapter = upcomingMovieAdapter
         }
     }
 
@@ -86,7 +84,7 @@ class HomeFragment :
                 super.onScrolled(recyclerView, dx, dy)
                 val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
                 val lastPosition = linearLayoutManager!!.findLastCompletelyVisibleItemPosition()
-                if (lastPosition == upcomingMovieRecyclerViewAdapter.itemCount - 1) {
+                if (lastPosition == upcomingMovieAdapter.itemCount - 1) {
                     viewModel.process(HomeViewModel.HomeViewEvent.LoadMore)
                 }
             }

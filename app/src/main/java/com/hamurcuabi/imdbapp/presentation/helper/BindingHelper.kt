@@ -10,8 +10,8 @@ import com.hamurcuabi.imdbapp.R
 import com.hamurcuabi.imdbapp.core.utils.exhaustive
 import com.hamurcuabi.imdbapp.core.utils.loadWithGlide
 import com.hamurcuabi.imdbapp.data.network.model.common.MovieOverview
-import com.hamurcuabi.imdbapp.presentation.home.MovieOverviewSliderAdapter
-import com.hamurcuabi.imdbapp.presentation.home.UpcomingMovieRecyclerViewAdapter
+import com.hamurcuabi.imdbapp.presentation.home.NowPlayingMovieAdapter
+import com.hamurcuabi.imdbapp.presentation.home.UpcomingMovieAdapter
 
 const val PREFIX_IMAGE_URL = "https://www.themoviedb.org/t/p/w1280"
 
@@ -27,8 +27,8 @@ fun loadImage(view: ImageView, url: String?) {
 @BindingAdapter("submitList")
 fun setMovieOverviewRecyclerViewAdapter(recyclerView: RecyclerView, items: List<MovieOverview>?) {
     items?.let {
-        if (recyclerView.adapter is UpcomingMovieRecyclerViewAdapter) {
-            (recyclerView.adapter as UpcomingMovieRecyclerViewAdapter).submitList(items)
+        if (recyclerView.adapter is UpcomingMovieAdapter) {
+            (recyclerView.adapter as UpcomingMovieAdapter).submitList(items)
         }
     }
 }
@@ -36,8 +36,8 @@ fun setMovieOverviewRecyclerViewAdapter(recyclerView: RecyclerView, items: List<
 @BindingAdapter("submitListViewPager2")
 fun setViewPager2Adapter(view: ViewPager2, items: List<MovieOverview>?) {
     items?.let {
-        if (view.adapter is MovieOverviewSliderAdapter) {
-            (view.adapter as MovieOverviewSliderAdapter).submitList(items)
+        if (view.adapter is NowPlayingMovieAdapter) {
+            (view.adapter as NowPlayingMovieAdapter).submitList(items)
         }
     }
 }

@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hamurcuabi.imdbapp.data.network.model.common.MovieOverview
 import com.hamurcuabi.imdbapp.databinding.ItemMovieOverviewBinding
 
-class MovieOverviewSliderAdapter(
+class NowPlayingMovieAdapter(
     private val onItemClicked: (MovieOverview) -> Unit
-) : ListAdapter<MovieOverview, MovieOverviewSliderAdapter.ViewHolder>(DiffCallback()) {
+) : ListAdapter<MovieOverview, NowPlayingMovieAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =

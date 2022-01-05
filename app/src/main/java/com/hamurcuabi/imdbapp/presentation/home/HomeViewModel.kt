@@ -1,8 +1,6 @@
 package com.hamurcuabi.imdbapp.presentation.home
 
 import android.os.CountDownTimer
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.hamurcuabi.imdbapp.core.base.BaseMVIViewModel
 import com.hamurcuabi.imdbapp.core.utils.Resource
@@ -64,8 +62,8 @@ class HomeViewModel @Inject constructor(
             is HomeViewEvent.GetUpcomingMovieList -> fetchUpcomingMovieList()
             is HomeViewEvent.LoadMore -> loadMore()
             is HomeViewEvent.StartToSlide -> resetTimer()
-            HomeViewEvent.ObserveState -> observeState()
-            HomeViewEvent.RefreshAll -> refreshAll()
+            is HomeViewEvent.ObserveState -> observeState()
+            is HomeViewEvent.RefreshAll -> refreshAll()
         }.exhaustive
     }
 
