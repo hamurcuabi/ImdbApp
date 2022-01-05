@@ -43,7 +43,7 @@ class HomeFragment :
 
     private fun setupIndicator() {
         TabLayoutMediator(binding.intoTabLayout, binding.vp2MovieOverview)
-        { tab, position -> }.attach()
+        { _, _ -> }.attach()
     }
 
     private fun setupAdapters() {

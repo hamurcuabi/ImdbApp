@@ -1,17 +1,15 @@
 package com.hamurcuabi.imdbapp.presentation.home
 
-import android.app.Application
 import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
 import com.hamurcuabi.imdbapp.core.base.BaseMVIViewModel
-import com.hamurcuabi.imdbapp.core.utils.exhaustive
 import com.hamurcuabi.imdbapp.core.utils.Resource
+import com.hamurcuabi.imdbapp.core.utils.exhaustive
 import com.hamurcuabi.imdbapp.data.network.model.common.MovieOverview
 import com.hamurcuabi.imdbapp.presentation.MainRepository
 import com.hamurcuabi.imdbapp.presentation.home.HomeViewModel.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
@@ -19,9 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    application: Application,
     private val mainRepository: MainRepository,
-) : BaseMVIViewModel<HomeViewState, HomeViewEffect, HomeViewEvent>(application) {
+) : BaseMVIViewModel<HomeViewState, HomeViewEffect, HomeViewEvent>() {
 
     companion object {
         const val SLIDER_COUNT = 6

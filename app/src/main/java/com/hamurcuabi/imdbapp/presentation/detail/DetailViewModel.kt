@@ -1,10 +1,8 @@
 package com.hamurcuabi.imdbapp.presentation.detail
 
-import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.hamurcuabi.imdbapp.core.base.BaseMVIViewModel
 import com.hamurcuabi.imdbapp.core.utils.Resource
-import com.hamurcuabi.imdbapp.data.network.model.common.MovieOverview
 import com.hamurcuabi.imdbapp.data.network.model.responses.MovieDetailResponse
 import com.hamurcuabi.imdbapp.presentation.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,10 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    application: Application,
     private val mainRepository: MainRepository,
 ) : BaseMVIViewModel<DetailViewModel.DetailViewState, DetailViewModel.DetailViewEffect, DetailViewModel.DetailViewEvent>(
-    application
 ) {
 
     init {

@@ -42,7 +42,7 @@ fun setViewPager2Adapter(view: ViewPager2, items: List<MovieOverview>?) {
     }
 }
 
-@BindingAdapter("customVisibility")
+@BindingAdapter("bindingVisibility")
 fun setVisibility(view: View, exp: Boolean?) {
     val visibility = when (exp) {
         true -> View.VISIBLE

@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.hamurcuabi.imdbapp.data.network.model.common.MovieOverview
-import com.hamurcuabi.imdbapp.databinding.ItemMovieOverviewBinding
 import com.hamurcuabi.imdbapp.databinding.ItemUpcomingMovieBinding
 
 class UpcomingMovieRecyclerViewAdapter(

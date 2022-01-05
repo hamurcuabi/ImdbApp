@@ -1,9 +1,6 @@
 package com.hamurcuabi.imdbapp.core.base
 
-import android.app.Application
-import android.util.Log
 import androidx.annotation.CallSuper
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,7 +29,7 @@ import com.hamurcuabi.imdbapp.core.utils.ViewModelContract
  *
  * @see <a href="https://medium.com/@rohitss/best-architecture-for-android-mvi-livedata-viewmodel-71a3a5ac7ee3">Article which explains this Custom MVI architecture with Architecture Components.</a>
  */
-open class BaseMVIViewModel<STATE, EFFECT, EVENT>(application: Application) :
+open class BaseMVIViewModel<STATE, EFFECT, EVENT> :
     ViewModel(), ViewModelContract<EVENT> {
 
     private val _viewStates: MutableLiveData<STATE> = MutableLiveData()

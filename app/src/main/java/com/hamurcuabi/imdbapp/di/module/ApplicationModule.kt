@@ -4,9 +4,9 @@ import android.content.Context
 import com.hamurcuabi.imdbapp.BuildConfig
 import com.hamurcuabi.imdbapp.core.utils.NetworkHelper
 import com.hamurcuabi.imdbapp.core.utils.ResourceProvider
+import com.hamurcuabi.imdbapp.data.network.ApiKeyAndLanguageInterceptor
 import com.hamurcuabi.imdbapp.data.network.api.ApiHelper
 import com.hamurcuabi.imdbapp.data.network.api.ApiHelperImpl
-import com.hamurcuabi.imdbapp.data.network.ApiKeyAndLanguageInterceptor
 import com.hamurcuabi.imdbapp.data.network.api.ApiService
 import com.hamurcuabi.imdbapp.di.DispatcherImpl
 import com.hamurcuabi.imdbapp.di.DispatcherProvider
@@ -15,8 +15,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -67,10 +65,6 @@ object ApplicationModule {
     @Provides
     @Singleton
     fun provideDispatchers(dispatcherImpl: DispatcherImpl): DispatcherProvider = dispatcherImpl
-
-    @Provides
-    @Singleton
-    fun provideApplicationScope() = CoroutineScope(SupervisorJob())
 
     @Provides
     @Singleton
