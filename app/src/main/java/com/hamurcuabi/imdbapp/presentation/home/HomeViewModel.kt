@@ -1,6 +1,8 @@
 package com.hamurcuabi.imdbapp.presentation.home
 
 import android.os.CountDownTimer
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.hamurcuabi.imdbapp.core.base.BaseMVIViewModel
 import com.hamurcuabi.imdbapp.core.utils.Resource
@@ -36,13 +38,16 @@ class HomeViewModel @Inject constructor(
         fetchUpcomingMovieList()
     }
 
+    private var _currentPage = MutableLiveData(0)
+    val currentPage: LiveData<Int> = _currentPage
+
     private val timer = object : CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
         override fun onTick(millisUntilFinished: Long) {
-            var page = viewState.currentSliderPage + 1
+            var page = _currentPage.value?.plus(1)
             if (page == SLIDER_COUNT) {
                 page = 0
             }
-            viewState = viewState.copy(currentSliderPage = page)
+            _currentPage.value = page
         }
 
         override fun onFinish() {
@@ -62,7 +67,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun startToSlide() {
-        timer.start()
+        resetTimer()
+        viewState = viewState.copy()
     }
 
     private fun loadMore() {
@@ -145,7 +151,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun resetTimer() {
-        viewState = viewState.copy(currentSliderPage = 0)
+        _currentPage.value = 0
         timer.cancel()
         timer.start()
     }
@@ -164,7 +170,6 @@ class HomeViewModel @Inject constructor(
         val isLoadingUpcomingList: Boolean = false,
         val isLoadingNowPlayingList: Boolean = false,
         val isPagingLoading: Boolean = false,
-        val currentSliderPage: Int = 0,
         val currentApiPage: Int = 1,
         val maxApiPage: Int = 100,
     )

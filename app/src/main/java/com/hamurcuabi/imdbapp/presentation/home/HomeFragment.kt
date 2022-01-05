@@ -26,6 +26,14 @@ class HomeFragment :
         setupAdapters()
         initScrollListener()
         setupIndicator()
+        setObservers()
+        viewModel.process(HomeViewModel.HomeViewEvent.StartToSlide)
+    }
+
+    private fun setObservers() {
+        viewModel.currentPage.observe(this, {
+            binding.vp2MovieOverview.currentItem = it
+        })
     }
 
     private fun refreshData() {
@@ -77,12 +85,15 @@ class HomeFragment :
         })
     }
 
-    override fun renderViewState(viewState: HomeViewModel.HomeViewState) {
+    private fun bindViewState(viewState: HomeViewModel.HomeViewState) {
         binding.apply {
             this.viewState = viewState
-            vp2MovieOverview.currentItem = viewState.currentSliderPage
             swipeRefresh.isRefreshing = viewState.isLoadingNowPlayingList
         }
+    }
+
+    override fun renderViewState(viewState: HomeViewModel.HomeViewState) {
+        bindViewState(viewState)
     }
 
     override fun renderViewEffect(viewEffect: HomeViewModel.HomeViewEffect) {
