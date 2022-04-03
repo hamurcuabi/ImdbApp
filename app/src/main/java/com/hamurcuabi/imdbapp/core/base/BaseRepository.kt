@@ -3,8 +3,10 @@ package com.hamurcuabi.imdbapp.core.base
 import com.hamurcuabi.imdbapp.R
 import com.hamurcuabi.imdbapp.core.utils.NetworkHelper
 import com.hamurcuabi.imdbapp.core.utils.NetworkResource
+import com.hamurcuabi.imdbapp.core.utils.Resource
 import com.hamurcuabi.imdbapp.core.utils.ResourceProvider
 import com.hamurcuabi.imdbapp.di.DispatcherProvider
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.Response
@@ -45,5 +47,19 @@ abstract class BaseRepository constructor(
                 NetworkResource.Error(resourceProvider.getString(R.string.no_internet_connection))
             }
         }
+    }
+
+    fun <T> baseFlowCreator(
+        apiCall: suspend () -> Response<T>
+    ) = flow {
+        emit(Resource.Loading)
+        val networkResponse = safeApiCall {
+            apiCall.invoke()
+        }
+        val response = when (networkResponse) {
+            is NetworkResource.Success -> Resource.Success(networkResponse.data?.body())
+            is NetworkResource.Error -> Resource.Failure(networkResponse.message)
+        }
+        emit(response)
     }
 }

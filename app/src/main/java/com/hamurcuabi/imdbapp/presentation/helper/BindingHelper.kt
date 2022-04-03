@@ -9,52 +9,47 @@ import androidx.viewpager2.widget.ViewPager2
 import com.hamurcuabi.imdbapp.R
 import com.hamurcuabi.imdbapp.core.utils.exhaustive
 import com.hamurcuabi.imdbapp.core.utils.loadWithGlide
-import com.hamurcuabi.imdbapp.data.network.model.common.MovieOverview
-import com.hamurcuabi.imdbapp.presentation.home.NowPlayingMovieAdapter
-import com.hamurcuabi.imdbapp.presentation.home.UpcomingMovieAdapter
 
 const val PREFIX_IMAGE_URL = "https://www.themoviedb.org/t/p/w1280"
 
 @BindingAdapter("loadImage")
-fun loadImage(view: ImageView, url: String?) {
+fun ImageView.loadImage(url: String?) {
     url?.let {
-        view.loadWithGlide(PREFIX_IMAGE_URL + it)
+        this.loadWithGlide(PREFIX_IMAGE_URL + it)
     } ?: run {
-        view.loadWithGlide(R.drawable.ic_no_image)
+        this.loadWithGlide(R.drawable.ic_no_image)
     }
 }
 
 @BindingAdapter("submitList")
-fun setMovieOverviewRecyclerViewAdapter(recyclerView: RecyclerView, items: List<MovieOverview>?) {
+fun <T> RecyclerView.submitList(items: List<T>?) {
     items?.let {
-        if (recyclerView.adapter is UpcomingMovieAdapter) {
-            (recyclerView.adapter as UpcomingMovieAdapter).submitList(items)
-        }
+        val adapter = (this.adapter as androidx.recyclerview.widget.ListAdapter<T, *>)
+        adapter.submitList(items)
     }
 }
 
-@BindingAdapter("submitListViewPager2")
-fun setViewPager2Adapter(view: ViewPager2, items: List<MovieOverview>?) {
+@BindingAdapter("submitListViewPager2Generic")
+fun <T> ViewPager2.submitListViewPager2Generic(items: List<T>?) {
     items?.let {
-        if (view.adapter is NowPlayingMovieAdapter) {
-            (view.adapter as NowPlayingMovieAdapter).submitList(items)
-        }
+        val adapter = (this.adapter as androidx.recyclerview.widget.ListAdapter<T, *>)
+        adapter.submitList(items)
     }
 }
 
 @BindingAdapter("bindingVisibility")
-fun setVisibility(view: View, exp: Boolean?) {
+fun View.setVisibility(exp: Boolean?) {
     val visibility = when (exp) {
         true -> View.VISIBLE
         false -> View.GONE
         else -> View.VISIBLE
     }.exhaustive
 
-    view.visibility = visibility
+    this.visibility = visibility
 }
 
 @BindingAdapter("textAverage")
-fun setAverageText(view: TextView, average: Double) {
+fun TextView.setAverageText(average: Double) {
     val text = "$average/10"
-    view.text = text
+    this.text = text
 }
