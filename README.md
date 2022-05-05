@@ -18,6 +18,7 @@
 - Coroutine
 - Okhttp
 - Glide
+- Chuck
 
 
 ## MVI Architecture
