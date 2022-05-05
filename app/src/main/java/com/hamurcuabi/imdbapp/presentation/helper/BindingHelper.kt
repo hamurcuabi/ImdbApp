@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.hamurcuabi.imdbapp.R
@@ -52,4 +53,22 @@ fun View.setVisibility(exp: Boolean?) {
 fun TextView.setAverageText(average: Double) {
     val text = "$average/10"
     this.text = text
+}
+
+@BindingAdapter("onLoadMoreScrollListener")
+fun RecyclerView.onLoadMoreScrollListener(onLoadMore: () -> Unit) {
+    this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val linearLayoutManager = recyclerView.layoutManager as? LinearLayoutManager
+            val lastPosition = linearLayoutManager?.findLastCompletelyVisibleItemPosition()
+            lastPosition?.let {
+                adapter?.let { adapter ->
+                    if (it == adapter.itemCount - 1) {
+                        onLoadMore.invoke()
+                    }
+                }
+            }
+        }
+    })
 }

@@ -32,6 +32,7 @@ buildscript {
         swipeRefreshVersion = "1.1.0"
         shimmerVersion = "0.5.0"
         leakCanaryVersion = "2.8"
+        chuckVersion = "1.1.0"
     }
     repositories {
         google()

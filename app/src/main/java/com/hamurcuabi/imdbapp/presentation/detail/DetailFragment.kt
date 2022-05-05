@@ -5,35 +5,38 @@ import com.hamurcuabi.imdbapp.R
 import com.hamurcuabi.imdbapp.core.base.BaseFragment
 import com.hamurcuabi.imdbapp.core.utils.exhaustive
 import com.hamurcuabi.imdbapp.databinding.FragmentDetailBinding
+import com.hamurcuabi.imdbapp.presentation.detail.DetailViewModel.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailFragment :
-    BaseFragment<FragmentDetailBinding, DetailViewModel.DetailViewState, DetailViewModel.DetailViewEffect, DetailViewModel.DetailViewEvent, DetailViewModel>(
-        FragmentDetailBinding::inflate
-    ) {
+    BaseFragment<FragmentDetailBinding,
+            DetailViewState,
+            DetailViewEffect,
+            DetailViewEvent,
+            DetailViewModel>(FragmentDetailBinding::inflate) {
 
     override val viewModel: DetailViewModel by viewModels()
 
     override fun init() {
         arguments?.let {
             val args = DetailFragmentArgs.fromBundle(it)
-            viewModel.process(DetailViewModel.DetailViewEvent.GetMovieDetail(args.movieId))
+            viewModel.process(DetailViewEvent.GetMovieDetail(args.movieId))
         } ?: run {
-            viewModel.process(DetailViewModel.DetailViewEvent.ShowError(getString(R.string.unexpected_error)))
+            viewModel.process(DetailViewEvent.ShowError(getString(R.string.unexpected_error)))
         }
     }
 
-    override fun renderViewState(viewState: DetailViewModel.DetailViewState) {
+    override fun renderViewState(viewState: DetailViewState) {
         binding.apply {
             this.viewState = viewState
         }
     }
 
-    override fun renderViewEffect(viewEffect: DetailViewModel.DetailViewEffect) {
+    override fun renderViewEffect(viewEffect: DetailViewEffect) {
         when (viewEffect) {
-            is DetailViewModel.DetailViewEffect.NavigateBack -> navigateBack()
-            is DetailViewModel.DetailViewEffect.ShowToast -> showToast(viewEffect.message)
+            is DetailViewEffect.NavigateBack -> navigateBack()
+            is DetailViewEffect.ShowToast -> showToast(viewEffect.message)
         }.exhaustive
     }
 }

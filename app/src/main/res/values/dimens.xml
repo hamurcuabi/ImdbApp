@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="m16">16dp</dimen>
-    <dimen name="m8">8dp</dimen>
-    <dimen name="m4">4dp</dimen>
-    <dimen name="m100">100dp</dimen>
+    <dimen name="dp256">256dp</dimen>
+    <dimen name="dp100">100dp</dimen>
+    <dimen name="dp96">96dp</dimen>
+    <dimen name="dp48">48dp</dimen>
+    <dimen name="dp24">24dp</dimen>
+    <dimen name="dp16">16dp</dimen>
+    <dimen name="dp12">12dp</dimen>
+    <dimen name="dp8">8dp</dimen>
+    <dimen name="dp4">4dp</dimen>
+
     <dimen name="indicator_size">8dp</dimen>
-    <dimen name="m96">96dp</dimen>
-    <dimen name="m12">12dp</dimen>
-    <dimen name="m24">24dp</dimen>
-    <dimen name="m48">48dp</dimen>
-    <dimen name="m256">256dp</dimen>
+
+    <dimen name="sp20">20sp</dimen>
+    <dimen name="sp15">15sp</dimen>
+    <dimen name="sp13">13sp</dimen>
+    <dimen name="sp12">12sp</dimen>
 </resources>

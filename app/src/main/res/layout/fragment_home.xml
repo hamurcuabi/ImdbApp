@@ -8,6 +8,10 @@
         <variable
             name="viewState"
             type="com.hamurcuabi.imdbapp.presentation.home.HomeViewModel.HomeViewState" />
+
+        <variable
+            name="viewModel"
+            type="com.hamurcuabi.imdbapp.presentation.home.HomeViewModel" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -34,7 +38,7 @@
                 android:id="@+id/into_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/m16"
+                android:layout_marginBottom="@dimen/dp16"
                 android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="@+id/vp2MovieOverview"
                 app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +51,7 @@
                 submitList="@{viewState.upcomingList}"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginVertical="@dimen/m8"
+                android:layout_marginVertical="@dimen/dp8"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

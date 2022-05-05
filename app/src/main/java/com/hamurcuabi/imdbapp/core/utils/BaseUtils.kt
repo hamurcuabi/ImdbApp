@@ -30,7 +30,7 @@ class NoObserverAttachedException(message: String) : Exception(message)
 fun ImageView.loadWithGlide(url: String?) {
     Glide.with(this.context)
         .load(url)
-        .fitCenter()
+        .centerInside()
         .error(R.drawable.ic_no_image)
         .into(this)
 }
@@ -38,7 +38,7 @@ fun ImageView.loadWithGlide(url: String?) {
 fun ImageView.loadWithGlide(@DrawableRes drawable: Int) {
     Glide.with(this.context)
         .load(drawable)
-        .fitCenter()
+        .centerInside()
         .into(this)
 }
 

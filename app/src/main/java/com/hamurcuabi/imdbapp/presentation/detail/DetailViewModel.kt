@@ -1,15 +1,9 @@
 package com.hamurcuabi.imdbapp.presentation.detail
 
-import androidx.lifecycle.viewModelScope
 import com.hamurcuabi.imdbapp.core.base.BaseMVIViewModel
-import com.hamurcuabi.imdbapp.core.utils.Resource
 import com.hamurcuabi.imdbapp.data.network.model.responses.MovieDetailResponse
 import com.hamurcuabi.imdbapp.presentation.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,26 +30,22 @@ class DetailViewModel @Inject constructor(
     }
 
     private fun fetchMovieDetail(id: Int) {
-        viewModelScope.launch {
-            val responseFlow = mainRepository.getMovieDetail(id).flowOn(Dispatchers.IO)
-            responseFlow.collect {
-                when (val response = it) {
-                    is Resource.Failure -> {
-                        viewState = viewState.copy(isLoading = false)
-                        viewEffect = DetailViewEffect.ShowToast(message = response.errorMessage)
-                    }
-                    is Resource.Loading -> {
-                        viewState = viewState.copy(isLoading = true)
-                    }
-                    is Resource.Success -> {
-                        viewState = viewState.copy(
-                            movieDetail = response.value,
-                            isLoading = false
-                        )
-                    }
-                }
+        makeApiCall(
+            onFailure = {
+                viewEffect =
+                    DetailViewEffect.ShowToast(message = it?.localizedMessage.toString())
+            },
+            onLoading = {
+                viewState = viewState.copy(isLoading = true)
+            },
+            onSuccess = {
+                viewState = viewState.copy(
+                    movieDetail = it,
+                    isLoading = false
+                )
             }
-        }
+        ) { mainRepository.getMovieDetail(id) }
+
     }
 
     sealed class DetailViewEvent {

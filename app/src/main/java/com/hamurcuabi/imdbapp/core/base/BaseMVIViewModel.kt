@@ -4,9 +4,14 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hamurcuabi.imdbapp.core.utils.NoObserverAttachedException
+import com.hamurcuabi.imdbapp.core.utils.Resource
 import com.hamurcuabi.imdbapp.core.utils.SingleLiveEvent
 import com.hamurcuabi.imdbapp.core.utils.ViewModelContract
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 /**
  * Create ViewModels by Extending this class.
@@ -31,6 +36,11 @@ import com.hamurcuabi.imdbapp.core.utils.ViewModelContract
  */
 open class BaseMVIViewModel<STATE, EFFECT, EVENT> :
     ViewModel(), ViewModelContract<EVENT> {
+
+    private val _showLoading: SingleLiveEvent<Boolean> = SingleLiveEvent()
+    val showLoading: SingleLiveEvent<Boolean> = _showLoading
+
+    var loadingCount = 0
 
     private val _viewStates: MutableLiveData<STATE> = MutableLiveData()
     fun viewStates(): LiveData<STATE> = _viewStates
@@ -64,4 +74,47 @@ open class BaseMVIViewModel<STATE, EFFECT, EVENT> :
         }
     }
 
+    fun <T> makeApiCall(
+        onFailure: (Throwable?) -> Unit,
+        onLoading: () -> Unit,
+        onSuccess: (T?) -> Unit,
+        showLoading: Boolean = true,
+        request: suspend () -> Flow<Resource<T>>,
+    ) {
+        viewModelScope.launch {
+            request().collect {
+                when (val response = it) {
+                    is Resource.Failure -> {
+                        loadingCount--
+                        hideLoading()
+                        onFailure.invoke(response.throwable)
+                    }
+                    is Resource.Loading -> {
+                        if (showLoading) {
+                            showLoading()
+                        }
+                        onLoading.invoke()
+                    }
+                    is Resource.Success -> {
+                        hideLoading()
+                        onSuccess.invoke(response.value)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showLoading() {
+        loadingCount++
+        if (loadingCount > 0) {
+            _showLoading.postValue(true)
+        }
+    }
+
+    private fun hideLoading() {
+        loadingCount--
+        if (loadingCount == 0) {
+            _showLoading.postValue(false)
+        }
+    }
 }

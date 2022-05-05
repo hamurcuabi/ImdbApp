@@ -11,6 +11,6 @@
     <color name="white60">#99FFFFFF</color>
     <color name="gray">#8D99AE</color>
     <color name="blackTitle">#2B2D42</color>
-    <color name="dividerColor">#E9ECEF</color>
+    <color name="dividerColor">#55E9ECEF</color>
     <color name="separatorDotColor">#E6B91E</color>
 </resources>

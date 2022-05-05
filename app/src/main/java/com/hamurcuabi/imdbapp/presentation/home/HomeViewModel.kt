@@ -1,20 +1,14 @@
 package com.hamurcuabi.imdbapp.presentation.home
 
 import android.os.CountDownTimer
-import androidx.lifecycle.viewModelScope
 import com.hamurcuabi.imdbapp.core.base.BaseMVIViewModel
-import com.hamurcuabi.imdbapp.core.utils.Resource
 import com.hamurcuabi.imdbapp.core.utils.exhaustive
 import com.hamurcuabi.imdbapp.data.network.model.common.MovieOverview
 import com.hamurcuabi.imdbapp.presentation.MainRepository
 import com.hamurcuabi.imdbapp.presentation.home.HomeViewModel.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,8 +17,9 @@ class HomeViewModel @Inject constructor(
 ) : BaseMVIViewModel<HomeViewState, HomeViewEffect, HomeViewEvent>() {
 
     companion object {
+        const val INITIAL_PAGE = 0
         const val SLIDER_COUNT = 6
-        const val INTERVAL = 5000L
+        const val INTERVAL = 10000L
         const val MILLIS_IN_FUTURE = INTERVAL * SLIDER_COUNT
     }
 
@@ -37,14 +32,14 @@ class HomeViewModel @Inject constructor(
         refreshAll()
     }
 
-    private var _currentPage = MutableStateFlow(0)
+    private var _currentPage = MutableStateFlow(INITIAL_PAGE)
     val currentPage: StateFlow<Int> = _currentPage
 
     private val timer = object : CountDownTimer(MILLIS_IN_FUTURE, INTERVAL) {
         override fun onTick(millisUntilFinished: Long) {
-            var page = _currentPage.value?.plus(1)
+            var page = _currentPage.value.plus(1)
             if (page == SLIDER_COUNT) {
-                page = 0
+                page = INITIAL_PAGE
             }
             _currentPage.value = page
         }
@@ -62,7 +57,7 @@ class HomeViewModel @Inject constructor(
             is HomeViewEvent.GetUpcomingMovieList -> fetchUpcomingMovieList()
             is HomeViewEvent.LoadMore -> loadMore()
             is HomeViewEvent.StartToSlide -> resetTimer()
-            is HomeViewEvent.ObserveState -> observeState()
+            is HomeViewEvent.IdleState -> observeState()
             is HomeViewEvent.RefreshAll -> refreshAll()
         }.exhaustive
     }
@@ -89,69 +84,61 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun fetchNowPlayingMovieList() {
-        viewModelScope.launch {
-            val responseFlow = mainRepository.getNowPlayingMovieList().flowOn(Dispatchers.IO)
-            responseFlow.collect {
-                when (val response = it) {
-                    is Resource.Failure -> {
-                        viewState = viewState.copy(isLoadingNowPlayingList = false)
-                        viewEffect = HomeViewEffect.ShowToast(message = response.errorMessage)
-                    }
-                    is Resource.Loading -> {
-                        viewState = viewState.copy(isLoadingNowPlayingList = true)
-                    }
-                    is Resource.Success -> {
-                        viewState = viewState.copy(
-                            nowPlayingList = response.value?.movieOverviews?.take(SLIDER_COUNT),
-                            isLoadingNowPlayingList = false
-                        )
-                        resetTimer()
-                    }
-                }
-            }
-        }
+
+        makeApiCall(
+            onFailure = {
+                viewState = viewState.copy(isLoadingNowPlayingList = false)
+                viewEffect =
+                    HomeViewEffect.ShowToast(message = it?.localizedMessage.toString())
+            },
+            onSuccess = {
+                viewState = viewState.copy(
+                    nowPlayingList = it?.movieOverviews?.take(SLIDER_COUNT),
+                    isLoadingNowPlayingList = false
+                )
+                resetTimer()
+            },
+            onLoading = {
+                viewState = viewState.copy(isLoadingNowPlayingList = true)
+            },
+            showLoading = false
+        ) { mainRepository.getNowPlayingMovieList() }
     }
 
     private fun fetchUpcomingMovieList(page: Int = 1) {
-        viewModelScope.launch {
-            val responseFlow = mainRepository.getUpcomingMovieList(page).flowOn(Dispatchers.IO)
-            val isPaging = page > 1
-            responseFlow.collect {
-                when (val response = it) {
-                    is Resource.Failure -> {
-                        viewState =
-                            viewState.copy(
-                                isLoadingUpcomingList = false,
-                                isPagingLoading = false
-                            )
-                        viewEffect = HomeViewEffect.ShowToast(message = response.errorMessage)
-                    }
-                    is Resource.Loading -> {
-                        viewState =
-                            viewState.copy(
-                                isLoadingUpcomingList = isPaging.not(),
-                                isPagingLoading = isPaging
-                            )
-                    }
-                    is Resource.Success -> {
-                        // It means paging
-                        var upcomingList = response.value?.movieOverviews
-                        upcomingList?.let { list ->
-                            if (page > 1) {
-                                upcomingList = viewState.upcomingList?.plus(list)
-                            }
-                        }
-                        viewState = viewState.copy(
-                            upcomingList = upcomingList,
-                            isLoadingUpcomingList = false,
-                            isPagingLoading = false,
-                            currentApiPage = response.value?.page ?: 0,
-                            maxApiPage = response.value?.totalPages ?: 100
-                        )
+        val isPaging = page > 1
+        makeApiCall(
+            onFailure = {
+                viewState = viewState.copy(
+                    isLoadingUpcomingList = false,
+                    isPagingLoading = false
+                )
+                viewEffect =
+                    HomeViewEffect.ShowToast(message = it?.localizedMessage.toString())
+            },
+            onLoading = {
+                viewState = viewState.copy(
+                    isLoadingUpcomingList = isPaging.not(),
+                    isPagingLoading = isPaging
+                )
+            },
+            onSuccess = {
+                var upcomingList = it?.movieOverviews
+                upcomingList?.let { list ->
+                    if (page > 1) {
+                        upcomingList = viewState.upcomingList?.plus(list)
                     }
                 }
-            }
-        }
+                viewState = viewState.copy(
+                    upcomingList = upcomingList,
+                    isLoadingUpcomingList = false,
+                    isPagingLoading = false,
+                    currentApiPage = it?.page ?: 0,
+                    maxApiPage = it?.totalPages ?: 100
+                )
+            },
+            showLoading = false
+        ) { mainRepository.getUpcomingMovieList(page) }
     }
 
     private fun resetTimer() {
@@ -160,7 +147,7 @@ class HomeViewModel @Inject constructor(
     }
 
     sealed class HomeViewEvent {
-        object ObserveState : HomeViewEvent()
+        object IdleState : HomeViewEvent()
         object RefreshAll : HomeViewEvent()
         object GetNowPlayingMovieList : HomeViewEvent()
         object GetUpcomingMovieList : HomeViewEvent()
@@ -183,4 +170,5 @@ class HomeViewModel @Inject constructor(
         data class ShowToast(val message: String) : HomeViewEffect()
         data class GoToDetailPage(val movieId: Int) : HomeViewEffect()
     }
+
 }

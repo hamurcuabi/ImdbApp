@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/m16"
+                android:layout_margin="@dimen/dp16"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +57,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/m8"
+                    android:layout_marginHorizontal="@dimen/dp8"
                     android:src="@drawable/ic_rate" />
 
                 <TextView
@@ -65,13 +65,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/robot_medium"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/sp13"
                     tools:text="7.8/10" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/m8"
+                    android:layout_marginHorizontal="@dimen/dp8"
                     android:background="@drawable/separator_dot" />
 
                 <TextView
@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/robot_medium"
                     android:text="@{viewState.movieDetail.releaseDate}"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/sp13"
                     tools:text="15.02.2021" />
 
 
@@ -91,10 +91,10 @@
                 style="@style/TextColorStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/m16"
+                android:layout_marginTop="@dimen/dp16"
                 android:fontFamily="@font/roboto_bold"
                 android:text="@{viewState.movieDetail.originalTitle}"
-                android:textSize="20sp"
+                android:textSize="@dimen/sp20"
                 app:layout_constraintEnd_toEndOf="@+id/linearLayout"
                 app:layout_constraintStart_toStartOf="@+id/linearLayout"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout"
@@ -104,10 +104,10 @@
                 style="@style/TextColorStyle"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="@dimen/m8"
+                android:layout_marginVertical="@dimen/dp12"
                 android:fontFamily="@font/robot_medium"
                 android:text="@{viewState.movieDetail.overview}"
-                android:textSize="15sp"
+                android:textSize="@dimen/sp15"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/textView"
                 app:layout_constraintStart_toStartOf="@+id/textView"
@@ -124,6 +124,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
-
 
 </layout>

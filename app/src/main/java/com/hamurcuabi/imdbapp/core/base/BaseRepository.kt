@@ -1,24 +1,16 @@
 package com.hamurcuabi.imdbapp.core.base
 
-import com.hamurcuabi.imdbapp.R
-import com.hamurcuabi.imdbapp.core.utils.NetworkHelper
-import com.hamurcuabi.imdbapp.core.utils.NetworkResource
-import com.hamurcuabi.imdbapp.core.utils.Resource
-import com.hamurcuabi.imdbapp.core.utils.ResourceProvider
+import com.hamurcuabi.imdbapp.core.utils.*
 import com.hamurcuabi.imdbapp.di.DispatcherProvider
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
-import retrofit2.HttpException
 import retrofit2.Response
-import java.io.IOException
-import java.net.SocketTimeoutException
 
 abstract class BaseRepository constructor(
     private val networkHelper: NetworkHelper,
-    private val resourceProvider: ResourceProvider,
     private val dispatcher: DispatcherProvider
 ) {
-    suspend fun <T> safeApiCall(
+    private suspend fun <T> safeApiCall(
         apiCall: suspend () -> T
     ): NetworkResource<T> {
         return withContext(dispatcher.io) {
@@ -27,29 +19,19 @@ abstract class BaseRepository constructor(
                     val result = apiCall.invoke()
                     when ((result as Response<*>).code()) {
                         in 200..300 -> NetworkResource.Success(result)
-                        401 -> NetworkResource.Error(resourceProvider.getString(R.string.auth_error))
-                        else -> NetworkResource.Error(result.message())
+                        401 -> NetworkResource.Error(AuthError())
+                        else -> NetworkResource.Error(UnknownError())
                     }
                 } catch (throwable: Throwable) {
-                    when (throwable) {
-                        is HttpException -> NetworkResource.Error(throwable.message())
-                        is SocketTimeoutException -> NetworkResource.Error(
-                            resourceProvider.getString(
-                                R.string.socket_exception
-                            )
-                        )
-                        is IOException -> NetworkResource.Error(resourceProvider.getString(R.string.io_exception))
-                        else -> NetworkResource.Error(resourceProvider.getString(R.string.unexpected_error))
-                    }
+                    NetworkResource.Error(throwable)
                 }
-
             } else {
-                NetworkResource.Error(resourceProvider.getString(R.string.no_internet_connection))
+                NetworkResource.Error(InternetConnectionError())
             }
         }
     }
 
-    fun <T> baseFlowCreator(
+    fun <T> baseRequestFlow(
         apiCall: suspend () -> Response<T>
     ) = flow {
         emit(Resource.Loading)
@@ -58,7 +40,9 @@ abstract class BaseRepository constructor(
         }
         val response = when (networkResponse) {
             is NetworkResource.Success -> Resource.Success(networkResponse.data?.body())
-            is NetworkResource.Error -> Resource.Failure(networkResponse.message)
+            is NetworkResource.Error -> {
+                Resource.Failure(networkResponse.throwable)
+            }
         }
         emit(response)
     }
