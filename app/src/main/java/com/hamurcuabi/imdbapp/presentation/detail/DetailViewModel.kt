@@ -25,15 +25,13 @@ class DetailViewModel @Inject constructor(
     }
 
     private fun navigateBackWithErrorMessage(message: String) {
-        viewEffect = DetailViewEffect.ShowToast(message)
         viewEffect = DetailViewEffect.NavigateBack
     }
 
     private fun fetchMovieDetail(id: Int) {
         makeApiCall(
             onFailure = {
-                viewEffect =
-                    DetailViewEffect.ShowToast(message = it?.localizedMessage.toString())
+
             },
             onLoading = {
                 viewState = viewState.copy(isLoading = true)
@@ -59,7 +57,6 @@ class DetailViewModel @Inject constructor(
     )
 
     sealed class DetailViewEffect {
-        data class ShowToast(val message: String) : DetailViewEffect()
         object NavigateBack : DetailViewEffect()
     }
 }

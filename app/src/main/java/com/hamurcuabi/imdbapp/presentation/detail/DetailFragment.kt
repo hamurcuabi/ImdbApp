@@ -36,7 +36,6 @@ class DetailFragment :
     override fun renderViewEffect(viewEffect: DetailViewEffect) {
         when (viewEffect) {
             is DetailViewEffect.NavigateBack -> navigateBack()
-            is DetailViewEffect.ShowToast -> showToast(viewEffect.message)
         }.exhaustive
     }
 }

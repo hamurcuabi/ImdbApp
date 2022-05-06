@@ -13,7 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
 import androidx.viewbinding.ViewBinding
+import com.hamurcuabi.imdbapp.core.utils.AuthError
 import com.hamurcuabi.imdbapp.core.utils.InflateFragmentView
+import com.hamurcuabi.imdbapp.core.utils.InternetConnectionError
 
 
 abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : BaseMVIViewModel<STATE, EFFECT, EVENT>>(
@@ -51,7 +53,7 @@ abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : 
         Navigation.findNavController(binding.root).popBackStack()
     }
 
-    protected fun showToast(text: String) {
+    private fun showToast(text: String) {
         context?.let {
             Toast.makeText(it, text, Toast.LENGTH_SHORT).show()
         }
@@ -95,6 +97,26 @@ abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : 
         viewModel.viewEffects().observe(viewLifecycleOwner, viewEffectObserver)
         init()
         observeShowLoading()
+        observeNetworkError()
+    }
+
+    private fun observeNetworkError() {
+        viewModel.networkError.observe(viewLifecycleOwner) { error ->
+            when (error) {
+                is AuthError -> {
+                    showToast("Auth 401 ")
+                }
+                is UnknownError -> {
+                    showToast("Unknown")
+                }
+                is InternetConnectionError -> {
+                    showToast("Internet connection error ")
+                }
+                else -> {
+                    showToast("Some thing else")
+                }
+            }
+        }
     }
 
     private fun observeShowLoading() {

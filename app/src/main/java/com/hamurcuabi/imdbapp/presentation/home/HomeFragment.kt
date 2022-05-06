@@ -53,7 +53,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,
     override fun renderViewEffect(viewEffect: HomeViewEffect) {
         when (viewEffect) {
             is HomeViewEffect.GoToDetailPage -> navigateToDetail(viewEffect.movieId)
-            is HomeViewEffect.ShowToast -> showToast(viewEffect.message)
         }.exhaustive
     }
 

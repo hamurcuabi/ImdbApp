@@ -40,6 +40,9 @@ open class BaseMVIViewModel<STATE, EFFECT, EVENT> :
     private val _showLoading: SingleLiveEvent<Boolean> = SingleLiveEvent()
     val showLoading: SingleLiveEvent<Boolean> = _showLoading
 
+    private val _networkError: SingleLiveEvent<Throwable?> = SingleLiveEvent()
+    val networkError: SingleLiveEvent<Throwable?> = _networkError
+
     var loadingCount = 0
 
     private val _viewStates: MutableLiveData<STATE> = MutableLiveData()
@@ -85,8 +88,8 @@ open class BaseMVIViewModel<STATE, EFFECT, EVENT> :
             request().collect {
                 when (val response = it) {
                     is Resource.Failure -> {
-                        loadingCount--
                         hideLoading()
+                        _networkError.postValue(response.throwable)
                         onFailure.invoke(response.throwable)
                     }
                     is Resource.Loading -> {

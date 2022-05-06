@@ -88,8 +88,6 @@ class HomeViewModel @Inject constructor(
         makeApiCall(
             onFailure = {
                 viewState = viewState.copy(isLoadingNowPlayingList = false)
-                viewEffect =
-                    HomeViewEffect.ShowToast(message = it?.localizedMessage.toString())
             },
             onSuccess = {
                 viewState = viewState.copy(
@@ -113,8 +111,6 @@ class HomeViewModel @Inject constructor(
                     isLoadingUpcomingList = false,
                     isPagingLoading = false
                 )
-                viewEffect =
-                    HomeViewEffect.ShowToast(message = it?.localizedMessage.toString())
             },
             onLoading = {
                 viewState = viewState.copy(
@@ -167,7 +163,6 @@ class HomeViewModel @Inject constructor(
     )
 
     sealed class HomeViewEffect {
-        data class ShowToast(val message: String) : HomeViewEffect()
         data class GoToDetailPage(val movieId: Int) : HomeViewEffect()
     }
 
