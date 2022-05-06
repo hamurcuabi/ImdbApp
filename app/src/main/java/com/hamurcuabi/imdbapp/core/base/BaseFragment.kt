@@ -67,7 +67,8 @@ abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : 
                 args = LoadingDialog.Args(
                     "Yükleniyor...",
                     ""
-                )
+                ),
+                lifecycle
             )
         }
         val isAlreadyAdded = childFragmentManager.findFragmentByTag(LoadingDialog.TAG) != null

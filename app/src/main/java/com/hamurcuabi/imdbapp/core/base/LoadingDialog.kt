@@ -9,11 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Lifecycle
 import com.hamurcuabi.imdbapp.R
 import com.hamurcuabi.imdbapp.databinding.FragmentLoadingDilaogBinding
 import kotlinx.parcelize.Parcelize
 
-class LoadingDialog(private val args: Args) : DialogFragment(R.layout.fragment_loading_dilaog) {
+class LoadingDialog(private val args: Args,lifecycle: Lifecycle) : DialogFragment(R.layout.fragment_loading_dilaog) {
 
     private lateinit var binding: FragmentLoadingDilaogBinding
 
