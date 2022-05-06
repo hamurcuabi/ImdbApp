@@ -13,6 +13,7 @@
     <dimen name="indicator_size">8dp</dimen>
 
     <dimen name="sp20">20sp</dimen>
+    <dimen name="sp18">18sp</dimen>
     <dimen name="sp15">15sp</dimen>
     <dimen name="sp13">13sp</dimen>
     <dimen name="sp12">12sp</dimen>

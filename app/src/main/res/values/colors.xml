@@ -13,4 +13,5 @@
     <color name="blackTitle">#2B2D42</color>
     <color name="dividerColor">#55E9ECEF</color>
     <color name="separatorDotColor">#E6B91E</color>
+    <color name="dialog_background_color">#80000000</color>
 </resources>

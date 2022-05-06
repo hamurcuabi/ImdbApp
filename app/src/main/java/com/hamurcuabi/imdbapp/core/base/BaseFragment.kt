@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
@@ -21,7 +18,7 @@ import com.hamurcuabi.imdbapp.core.utils.InternetConnectionError
 abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : BaseMVIViewModel<STATE, EFFECT, EVENT>>(
     private val inflateFragmentView: InflateFragmentView<VB>
 ) : Fragment() {
-    private var loadingDialog: AlertDialog? = null
+    private var loadingDialog: LoadingDialog? = null
 
     abstract val viewModel: ViewModel
     private var _binding: VB? = null
@@ -61,24 +58,21 @@ abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : 
 
     protected open fun hideLoadingDialog() {
         loadingDialog?.dismiss()
+        loadingDialog = null
     }
 
     protected open fun showLoadingDialog() {
-        context?.let { context ->
-            if (loadingDialog == null) {
-                val progressBar = ProgressBar(context)
-                val lp = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+        if (loadingDialog == null) {
+            loadingDialog = LoadingDialog(
+                args = LoadingDialog.Args(
+                    "Yükleniyor...",
+                    ""
                 )
-                progressBar.layoutParams = lp
-
-                loadingDialog = AlertDialog.Builder(context)
-                    .setCancelable(false)
-                    .setView(progressBar)
-                    .create()
-            }
-            loadingDialog?.show()
+            )
+        }
+        val isAlreadyAdded = childFragmentManager.findFragmentByTag(LoadingDialog.TAG) != null
+        if (isAlreadyAdded.not()) {
+            loadingDialog?.show(childFragmentManager, LoadingDialog.TAG)
         }
     }
 

@@ -99,7 +99,6 @@ class HomeViewModel @Inject constructor(
             onLoading = {
                 viewState = viewState.copy(isLoadingNowPlayingList = true)
             },
-            showLoading = false
         ) { mainRepository.getNowPlayingMovieList() }
     }
 
@@ -133,7 +132,6 @@ class HomeViewModel @Inject constructor(
                     maxApiPage = it?.totalPages ?: 100
                 )
             },
-            showLoading = false
         ) { mainRepository.getUpcomingMovieList(page) }
     }
 
