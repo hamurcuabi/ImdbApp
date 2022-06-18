@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.hamurcuabi.imdbapp.R
 import com.hamurcuabi.imdbapp.core.utils.exhaustive
@@ -53,6 +54,14 @@ fun View.setVisibility(exp: Boolean?) {
 fun TextView.setAverageText(average: Double) {
     val text = "$average/10"
     this.text = text
+}
+
+
+@BindingAdapter("isRefreshing")
+fun SwipeRefreshLayout.setIsRefreshing(isRefreshing: Boolean?) {
+    isRefreshing?.let {
+        this.isRefreshing = it
+    }
 }
 
 @BindingAdapter("onLoadMoreScrollListener")

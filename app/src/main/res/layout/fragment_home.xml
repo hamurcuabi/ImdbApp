@@ -9,13 +9,11 @@
             name="viewState"
             type="com.hamurcuabi.imdbapp.presentation.home.HomeViewModel.HomeViewState" />
 
-        <variable
-            name="viewModel"
-            type="com.hamurcuabi.imdbapp.presentation.home.HomeViewModel" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
+        isRefreshing="@{viewState.isLoadingNowPlayingList}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".presentation.Home.HomeFragment">

@@ -57,7 +57,7 @@ abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : 
     }
 
     protected open fun hideLoadingDialog() {
-        loadingDialog?.dismiss()
+        loadingDialog?.dismissAllowingStateLoss()
         loadingDialog = null
     }
 
@@ -67,13 +67,12 @@ abstract class BaseFragment<VB : ViewBinding, STATE, EFFECT, EVENT, ViewModel : 
                 args = LoadingDialog.Args(
                     "Yükleniyor...",
                     ""
-                ),
-                lifecycle
+                )
             )
         }
-        val isAlreadyAdded = childFragmentManager.findFragmentByTag(LoadingDialog.TAG) != null
-        if (isAlreadyAdded.not()) {
-            loadingDialog?.show(childFragmentManager, LoadingDialog.TAG)
+        val isAlreadyAdded = childFragmentManager.findFragmentByTag(LoadingDialog.TAG)
+        if (isAlreadyAdded == null) {
+            loadingDialog?.showNow(childFragmentManager, LoadingDialog.TAG)
         }
     }
 

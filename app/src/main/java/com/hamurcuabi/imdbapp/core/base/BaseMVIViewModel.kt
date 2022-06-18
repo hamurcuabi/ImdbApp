@@ -110,14 +110,14 @@ open class BaseMVIViewModel<STATE, EFFECT, EVENT> :
     private fun showLoading() {
         loadingCount++
         if (loadingCount > 0) {
-            _showLoading.postValue(true)
+            _showLoading.value = true
         }
     }
 
     private fun hideLoading() {
         loadingCount--
         if (loadingCount == 0) {
-            _showLoading.postValue(false)
+            _showLoading.value = false
         }
     }
 }

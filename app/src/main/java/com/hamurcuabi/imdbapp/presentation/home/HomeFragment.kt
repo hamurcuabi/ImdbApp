@@ -42,7 +42,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,
     private fun bindViewState(viewState: HomeViewState) {
         binding.apply {
             this.viewState = viewState
-            swipeRefresh.isRefreshing = viewState.isLoadingNowPlayingList
         }
     }
 
