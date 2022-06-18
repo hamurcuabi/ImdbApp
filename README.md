@@ -28,7 +28,6 @@ In Model-View-Intent architecture, view exposes view-events (user input/action) 
 
 <img src="https://miro.medium.com/max/4800/1*w0QeeQqrnISXLhYkYZWoAg.png" width="400">
  
- Create ViewModels by Extending this class.
 
  **STATE** ViewState should represent the current state of the view at any given time.
  So this class should have all the variable content on which our view is dependent.
