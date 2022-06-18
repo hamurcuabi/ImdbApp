@@ -3,6 +3,7 @@
 - Lifecycle-aware components
 - ViewModels
 - LiveData
+- Flow
 - ViewBinding
 - DataBinding
 - Navigation
