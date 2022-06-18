@@ -4,7 +4,6 @@
 - ViewModels
 - LiveData
 - Flow
-- ViewBinding
 - DataBinding
 - Navigation
 
